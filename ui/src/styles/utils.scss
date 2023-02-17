@@ -1,0 +1,72 @@
+@import './override.scss';
+@import './button.scss';
+
+:root{
+    --border-light: whitesmoke;
+    --border-dark: #e8e8e8;
+    --descFontSize: #{$descFontSize};
+    --descFontSizeWithUnit: #{$descFontSizeWithUnit};
+    --tagFontSize: #{$tagFontSize};
+    --tagFontSizeWithUnit: #{$tagFontSizeWithUnit};
+    --themeLightest: #{$themeLightest};
+    --themeLight: #{$themeLight};
+    --themeDark: #{$themeDark};
+    --themeDarker: #{$themeDarker};
+    --themeDarkest: #{$themeDarkest};
+    body.theme-dark{
+        --border-light: #{darken(whitesmoke, 8%)};
+        --border-dark: #{darken(#efefef, 8%)};
+        --themeLight: #{darken($themeLight, 8%)};
+        --themeDark: #{darken($themeDark, 8%)};
+        --themeDarker: #{darken($themeDarker, 8%)};
+        --themeDarkest: #{darken($themeDarkest, 8%)};
+    }
+}
+
+html{
+    touch-action: manipulation;
+}
+
+h1, h2, h3, h4, h5, h6, p{
+    margin: 0 !important;
+}
+
+$autoPaddingSize: 12px; 
+.auto-p-h{
+    padding: 0 $autoPaddingSize;
+}
+.auto-p-v{
+    padding: $autoPaddingSize 0;
+}
+.auto-p{
+    padding: $autoPaddingSize;
+}
+.auto-p-l{
+    padding-left: $autoPaddingSize;
+}
+.auto-p-t{
+    padding-top: $autoPaddingSize;
+}
+.auto-p-r{
+    padding-right: $autoPaddingSize;
+}
+.auto-p-b{
+    padding-bottom: $autoPaddingSize;
+}
+// .auto-width{
+    // width: 100%;
+    // max-width: var(--page-width, 800px);
+    // @extend .auto-p-h;
+    // transition: max-width .3s;
+// }
+
+.card{
+    border-radius: 5px;
+    background: white;
+    box-shadow: rgba(0, 0, 0, .07) 0 0 48px;
+    border: 1px solid lightgray;
+}
+
+.desc{
+    color: #999;
+}

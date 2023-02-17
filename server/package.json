@@ -1,0 +1,29 @@
+{
+  "name": "huiconsole",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "egg-bin dev",
+    "test": "egg-bin test",
+    "start": "cross-env EGG_SERVER_ENV=prod NODE_ENV=production node server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "egg": {
+    "declarations": true,
+    "framework": "@anfo/egg-basic"
+  },
+  "dependencies": {
+    "@anfo/egg-basic": "^1.2.7",
+    "cross-env": "^7.0.2",
+    "egg": "^3",
+    "egg-scripts": "^2",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "egg-mock": "^4.2.1",
+    "egg-bin": "^4.15.0"
+  }
+}

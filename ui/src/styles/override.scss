@@ -1,0 +1,198 @@
+// input-search
+.ant-input-affix-wrapper{
+    border-radius: 5px!important;
+    line-height: normal !important;
+    overflow: hidden;
+}
+
+
+//input
+.ant-input{
+    font-size: 1em!important;
+    border-radius: 5px !important;
+}
+
+// modal
+.ant-modal{
+    font-size: inherit!important;
+
+    .ant-modal-header{
+        background: var(--themeLight);
+    }
+    .ant-modal-footer{
+        background: var(--themeLight);
+    }
+}
+.ant-modal-title{
+    font-size: inherit!important;
+    font-weight: inherit!important;
+}
+.ant-modal-content{
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+.ant-modal-body{
+    padding: 0 !important;
+    font-size: inherit !important;
+    background: var(--themeDark);
+    line-height: normal!important;
+
+    .ant-input{
+        background: transparent;
+        border: none;
+        border-bottom: 1px dashed var(--themeDarker);
+        border-radius: 0!important;
+        padding: 4px 0;
+        &:focus{
+            outline: none!important;
+            box-shadow: none;
+        }
+    }
+    textarea{
+        width: 100%;
+        background: transparent;
+        border: none;
+        resize: none;
+        &:focus{
+            outline: none;
+        }
+    }
+    .ant-input-affix-wrapper{
+        background: transparent;
+        padding: 4px 0;
+        border: none;
+        border-bottom: 1px dashed var(--themeDarker);
+        border-radius: 0!important;
+        
+        .ant-input-prefix{
+            margin-right: 8px;
+        }
+        &.ant-input-affix-wrapper-focused{
+            box-shadow: none;
+            border-color: #40a9ff;
+        }
+        .ant-input{
+            border: none !important;
+        }
+    }
+
+    .ant-slider-handle{
+        border-color: #40a9ff;
+    }
+    .ant-slider-track{
+        background: #40a9ff;
+    }
+    .ant-slider-rail{
+        background: var(--themeDarker);
+    }
+    .ant-slider:hover{
+        .ant-slider-track{
+            background: darken(#40a9ff, 10%);
+        }
+        .ant-slider-rail{
+            // background: darken($themeDarker, 10%);
+        }
+    }
+        
+}
+
+// btn
+.ant-btn{
+    border-radius: 5px !important;
+}
+
+// 下拉菜单字体大小
+.ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title{
+    // font-size: 12px;
+    font-size: .9em !important;
+}
+
+.ant-badge{
+    font-size: 1em!important;
+}
+
+// table
+.ant-table-tbody>tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td, .ant-table-tbody>tr.ant-table-row-selected>td.ant-table-column-sort, .ant-table-tbody>tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td, .ant-table-thead>tr.ant-table-row-hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td, .ant-table-thead>tr.ant-table-row-selected>td.ant-table-column-sort, .ant-table-thead>tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected)>td{
+    background: var(--themeDark);
+}
+
+//tag
+.ant-tag{
+    border-radius: 5px;
+}
+
+//tooltip
+.ant-tooltip-content{
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.ant-message-notice-content{
+    border-radius: 8px !important;
+    overflow: hidden;
+}
+
+// .plan, .task{
+    .ant-checkbox{
+        font-size: 1em!important;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    .ant-checkbox{
+        top: 0;
+        font-size: 1em;
+    }
+    .ant-checkbox-wrapper{
+        font-size: 1em !important;
+        align-items: center;
+        align-self: center;
+    }
+    .ant-checkbox-wrapper::after{
+        display: none;
+    }
+    .ant-checkbox-inner{
+        width: 1em!important;
+        height: 1em!important;
+        border-radius: 5px!important;
+    }
+// }
+
+.anticon > *{
+    line-height: normal!important;
+}
+.ant-radio-wrapper{
+    font-size: inherit!important;
+}
+
+.ant-pagination-item-active{
+    border-radius: 5px!important;
+    a{
+        padding: 0 .3em!important;
+    }
+}
+
+
+.ant-pagination{
+    font-size: 1em!important;
+
+    &.mini{
+        .ant-pagination-item{
+            height: 1.5em!important;
+            line-height: 1.5em!important;
+        }
+    }
+}
+
+
+// color picker fix
+.vc-hue-slider__bar{
+    background: linear-gradient(to left,red 0%,yellow 16.66%,lime 33.33%,aqua 50%,blue 66.66%,fuchsia 83.33%,red 100%);
+}
+
+.ant-tooltip{
+    font-size: 1em!important;
+}
+
+.ant-notification-notice{
+    border-radius: 12px !important;
+}

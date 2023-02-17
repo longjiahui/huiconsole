@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  caddy:
+    image: caddy:2.6.4-alpine
+    ports:
+      - 8080:8080
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+
+  ui:
+    build:
+      context: ./ui
+  server:
+    build:
+      context: ./server
+    depends_on:
+      - mongo
+    volumes:
+      - ./run/logs:/root/logs
+
+  mongo:
+    image: mongo:6.0.3
+    volumes:
+      - ./run/mongo/db:/data/db

@@ -1,0 +1,19 @@
+FROM node:16.19.0-alpine as ui-builder
+
+WORKDIR /app
+
+# WORKDIR app
+# RUN npm i -g nrm --registry=https://registry.npm.taobao.org
+# RUN nrm use taobao
+# RUN npm config set strict-ssl false
+
+COPY ./package.json .
+
+RUN npm i
+
+COPY . .
+RUN npm run build
+
+FROM caddy:2.6.4-alpine
+copy Caddyfile /etc/caddy/Caddyfile
+COPY --from=ui-builder /app/dist /var/www/html

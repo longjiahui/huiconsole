@@ -1,0 +1,19 @@
+.button{
+    color: $primaryColor;
+    border: 1px solid $primaryColor;
+    background: white;
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: opacity .3s;
+    font-size: .8em;
+
+    &.primary{
+        background: $primaryColor;
+        color: $primaryTextColor;
+    }
+
+    &:hover{
+        opacity: .7;
+    }
+}

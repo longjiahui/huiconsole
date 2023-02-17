@@ -1,0 +1,14 @@
+FROM node:19-alpine
+
+WORKDIR /app
+
+COPY ./package.json /app
+COPY ./package-lock.json /app
+# RUN npm i -g nrm --registry=https://registry.npm.taobao.org
+# RUN nrm use taobao
+# RUN npm config set strict-ssl false
+RUN npm i --production
+
+COPY . /app
+
+CMD npm run start
