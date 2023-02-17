@@ -1,4 +1,4 @@
 :8080 {
     reverse_proxy /api/* server:7001
-    reverse_proxy ui:8080
+    reverse_proxy ui:3000
 }
