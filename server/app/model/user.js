@@ -7,12 +7,12 @@ module.exports = app => {
             type: String,
             unique: true,
         },
-        nickname: String,
+        name: String,
         password: String,
         avatar: String,
         description: String,
 
-        // role: String,
+        role: { type: Schema.Types.ObjectId, ref: 'Role' },
     }, {
         timestamps: true,
     })

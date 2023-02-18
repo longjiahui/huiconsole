@@ -3,6 +3,7 @@ import { createApp, reactive, ref, h } from "vue"
 import MenuSaveDialog from '@/components/dialogs/MenuSave.vue'
 import IconPickerDialog from '@/components/dialogs/IconPicker.vue'
 import UserSaveDialog from '@/components/dialogs/UserSave.vue'
+import InputDialog from '@/components/dialogs/Input.vue'
 
 import plugins from '@/scripts/plugins'
 
@@ -68,6 +69,7 @@ let dialogs = {
     ['MenuSaveDialog', MenuSaveDialog],
     ['IconPickerDialog', IconPickerDialog],
     ['UserSaveDialog', UserSaveDialog],
+    ['InputDialog', InputDialog],
 ].forEach(d=>{
     let key = d[0]
     let DialogComponent = d[1]

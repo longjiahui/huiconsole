@@ -12,6 +12,11 @@
         background: $primaryColor;
         color: $primaryTextColor;
     }
+    &.error{
+        border: 1px solid $errorColor;
+        background: $errorColor;
+        color: $primaryTextColor;
+    }
 
     &:hover{
         opacity: .7;

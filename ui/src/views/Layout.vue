@@ -13,7 +13,8 @@
                                 </div>
                                 <template #overlay>
                                     <a-menu>
-                                        <a-menu-item @click="openTab(m)" v-for="m in [configMenusMenuItem]">{{ m.name }}</a-menu-item>
+                                        <a-menu-item @click="openTab(m)" v-for="m in [configMenusMenuItem, configUsersMenusItem]">{{ m.name }}</a-menu-item>
+                                        <a-menu-item @click="$mutations.logout()">退出系统</a-menu-item>
                                     </a-menu>
                                 </template>
                             </a-dropdown>
@@ -83,7 +84,7 @@
                 <div class="main-main f-1 v v-m">
                     <!-- tabs -->
                     <div class="main-tabs card h h-s p-s align-stretch">
-                        <div class="h h-s">
+                        <div class="h h-s" v-if="tabs.length !== 1">
                             <transition name="anfo-fade" mode="out-in">
                                 <div v-if="tabs.length > 1">
                                     <a-tooltip placement="left" title="清除全部标签">
@@ -182,8 +183,14 @@ Promise.all([
 })
 
 const configMenusMenuItem = {
+    _id: '__menuConfig',
     name: '菜单配置',
     data: 'views/ConfigMenus',
+}
+const configUsersMenusItem = {
+    _id: '__userconfig',
+    name: '用户配置',
+    data: 'views/ConfigUsers',
 }
 
 let tabs = ref(utils.getLocal('tabs', []).map(t=>{

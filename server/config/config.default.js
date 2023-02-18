@@ -5,7 +5,8 @@ module.exports = app=>({
     keys: 'my-cookie-secret-key',
     middleware: ['error', 'log'],
     jwtSecret: {
-        user: 'test-haha'
+        user: 'test-haha',
+        passwordChanging: 'test-haha2',
     },
 
     static: {

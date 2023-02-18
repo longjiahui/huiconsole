@@ -8,7 +8,11 @@ let { isLoading } = getters
 <template>
   <a-config-provider :locale="zhCN">
     <div class="v size-full overflow-overlay" v-loading="isLoading">
-      <router-view class="f-1"></router-view>
+      <router-view v-slot="{ Component, route }">
+        <transition name="anfo-fade-tr" mode="out-in" appear>
+          <component :is="Component" class="f-1" />
+        </transition>
+      </router-view>
     </div>
   </a-config-provider>
 </template>

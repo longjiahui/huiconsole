@@ -1,10 +1,9 @@
 <template>
-<div class="page h justify-center" style="background: whitesmoke">
-    <transition mode="out-in" name="anfo-fade" appear>
-        <anfo-spin v-if="isLoading"></anfo-spin>
-        <div v-else-if="isAdminRegistered" class="card p-l v v-m align-center">
-            <h1>huiconsole</h1>
-            <p class="desc">欢迎使用huiconsole后台管理系统</p>
+<div v-loading="isLoading" class="page h justify-center" style="background: whitesmoke">
+    <transition mode="out-in" name="anfo-fade">
+        <div v-if="isAdminRegistered" class="card p-l v v-m align-center">
+            <h1>HUI CONSOLE</h1>
+            <p class="desc">欢迎使用HUI CONSOLE后台管理系统</p>
             <div class="v v-m">
                 <a-input v-focus placeholder="用户名"
                     v-model:value="username"
@@ -24,7 +23,7 @@
             <a-button type="primary">登录</a-button>
         </div>
         <div v-else class="card p-l v v-m align-center">
-            <h1>huiconsole</h1>
+            <h1>HUI CONSOLE</h1>
             <p class="desc">初次进入，请输入初始管理员密码</p>
             <a-input type="password" v-focus placeholder="密码"
                     v-model:value="adminPassword"
