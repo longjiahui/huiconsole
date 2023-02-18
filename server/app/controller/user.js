@@ -29,7 +29,7 @@ module.exports = app=>class extends app.Controller{
                 role: adminRole._id,
             })
         }
-        let token = app.userJWTSign(await this.service.ret.user.getFullUserByID(u._id))
+        let token = app.userJWTSign(await this.service.user.getFullUserByID(u._id))
         this.service.user.setUserTokenAsCookie(token)
         ctx.body = this.service.ret.success(token)
     }
@@ -64,7 +64,7 @@ module.exports = app=>class extends app.Controller{
         if(!user?._id){
             throw new app.Error(0, 'token内容不完整')
         }
-        let newestUser = await this.service.ret.user.getFullUserByID(user._id)
+        let newestUser = await this.service.user.getFullUserByID(user._id)
         if(!newestUser){
             throw new app.Error(1, '用户不存在')
         }

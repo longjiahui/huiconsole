@@ -7,7 +7,7 @@ module.exports = app => class extends app.Controller{
         let newestUser = await this.service.user.getFullUserByID(user._id)
         let menusFilter = []
         if(!newestUser?.role?.isAdmin){
-            menusFilter = [{$match: { _id: {$in: newestUser.role.menus || []}}}]
+            menusFilter = [{$match: { _id: {$in: newestUser.role?.menus || []}}}]
         }
         ctx.body = await this.service.ret.pageDataByAggregate({
             model: ctx.model.Menu,
