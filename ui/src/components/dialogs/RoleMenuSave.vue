@@ -1,7 +1,7 @@
 <template>
 <a-modal width="400px" title="菜单权限配置" @cancel="emit('reject')" @ok="handleSave">
     <div class="p-l">
-        <anfo-tree v-if="_id && lMenus?.length > 0" :datas="lMenus" #="{ hasChildren, item, datas, i }" data-key="_id" children-key="subMenus">
+        <anfo-tree v-if="lMenus?.length > 0" :datas="lMenus" #="{ hasChildren, item, datas, i }" data-key="_id" children-key="subMenus">
             <div @click="handleCheck(item, !checkDatas[item._id])" class="f-1 h h-s p-v-xs menu-item clickable">
                 <a-checkbox
                     @update:checked="val=>handleCheck(item, val)"
@@ -12,8 +12,7 @@
                 <div class="desc">{{ item.data }}</div>
             </div>
         </anfo-tree>
-        <div v-else-if="_id" class="desc">暂时没有菜单数据</div>
-        <div v-if="!_id">参数不完整，_id为空</div>
+        <div v-else class="desc">暂时没有菜单数据</div>
     </div>
 </a-modal>
 </template>
@@ -88,7 +87,6 @@ async function handleCheck(m, isChecked){
 }
 
 async function handleSave(){
-    let roleID = props._id
     let menuIDs = (await utils.iterateFilter(lMenus.value, 'subMenus', m=>{
         return !!indeterminates.value[m._id] || !!checkDatas.value[m._id]
     })).map(m=>m._id)
