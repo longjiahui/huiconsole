@@ -337,8 +337,9 @@ $navHeight: 48px;
     // background: whitesmoke;
 
     .brand{
+        border: 1px solid $primaryColor;
         color: $primaryTextColor;
-        background: $primaryColor;
+        background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 5%));
         height: $navHeight;
     }
 }
@@ -347,7 +348,8 @@ $navHeight: 48px;
 // }
 .main-tabs{
     height: $navHeight;
-    background: $primaryColor;
+    // background: $primaryColor;
+    background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 5%));
     overflow: hidden;
     border-radius: 5px;
     border: 1px solid $primaryColor;
@@ -394,6 +396,7 @@ $navHeight: 48px;
     @mixin focus{
         color: $primaryTextColor;
         background: $primaryColor;
+        background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 10%));
     }
     &:hover {
         @include focus;

@@ -9,7 +9,8 @@
     font-size: .8em;
 
     &.primary{
-        background: $primaryColor;
+        background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 10%));
+        // background: $primaryColor;
         color: $primaryTextColor;
     }
     &.error{
