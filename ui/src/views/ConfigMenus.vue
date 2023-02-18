@@ -8,7 +8,7 @@
         <div class="card p-m">
             <anfo-tree @change="handleChange" :datas="menus" :data-key="d=>d._id" children-key="subMenus">
                 <template #="{ item, i, datas, hasChildren }">
-                    <div @click="handleEditMenu(item, datas, i)" class="clickable f-1 menu-item h h-xs p-v-xs">
+                    <div @click="handleEditMenu(item, datas, i)" class="clickable f-1 menu-item h h-xs p-v-s">
                         <template v-if="item">
                             <div v-if="item.icon">
                                 <component :is="item.icon" />

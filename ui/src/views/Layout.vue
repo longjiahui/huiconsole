@@ -13,8 +13,20 @@
                                 </div>
                                 <template #overlay>
                                     <a-menu>
-                                        <a-menu-item @click="openTab(m)" v-for="m in [configMenusMenuItem, configUsersMenusItem]">{{ m.name }}</a-menu-item>
-                                        <a-menu-item @click="$mutations.logout()">退出系统</a-menu-item>
+                                        <template v-if="$getters.isImAdmin">
+                                            <a-menu-item @click="openTab(m)" v-for="m in [configRolesMenusItem, configUsersMenusItem, configMenusMenuItem]">
+                                                <div class="h h-xs">
+                                                    <component :is="m.dropDownIcon"></component>
+                                                    <div>{{ m.name }}</div>
+                                                </div>
+                                            </a-menu-item>
+                                        </template>
+                                        <a-menu-item @click="$mutations.logout()">
+                                            <div class="h h-xs">
+                                                <LogoutOutlined />
+                                                <div>退出登录</div>
+                                            </div>
+                                        </a-menu-item>
                                     </a-menu>
                                 </template>
                             </a-dropdown>
@@ -184,13 +196,24 @@ Promise.all([
 
 const configMenusMenuItem = {
     _id: '__menuConfig',
-    name: '菜单配置',
+    name: '菜单项',
+    dropDownIcon: 'MenuOutlined',
+    icon: 'SettingOutlined',
     data: 'views/ConfigMenus',
 }
 const configUsersMenusItem = {
     _id: '__userconfig',
-    name: '用户配置',
+    name: '用户',
+    dropDownIcon: 'UserOutlined',
+    icon: 'SettingOutlined',
     data: 'views/ConfigUsers',
+}
+const configRolesMenusItem = {
+    _id: '__roleConfig',
+    name: '角色',
+    dropDownIcon: 'UserOutlined',
+    icon: 'SettingOutlined',
+    data: 'views/ConfigRoles',
 }
 
 let tabs = ref(utils.getLocal('tabs', []).map(t=>{
@@ -349,11 +372,11 @@ $navHeight: 48px;
     transition: background .3s, padding .3s, color .3s;
     cursor: pointer;
     background: rgba(0, 0, 0, calc(.04 + var(--layer) * .05));
-    padding: 6px 8px;
+    padding: 8px 8px;
     
     &.has-children{
         background: rgba(0, 0, 0, calc(var(--layer) * .05));
-        box-shadow: rgba(0, 0, 0, .12) 0 0 24px;
+        box-shadow: rgba(0, 0, 0, .14) 0 0 24px;
     }
     &.has-top-left-radius{
         border-top-left-radius: 5px;

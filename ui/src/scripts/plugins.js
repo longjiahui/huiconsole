@@ -7,6 +7,7 @@ import * as Icons from '@ant-design/icons-vue'
 
 import { state, mutations, getters } from '@/store'
 import dialog from '@/scripts/dialog'
+import utils from '@/scripts/utils'
 import $const from '@/const'
 
 export default {
@@ -19,8 +20,9 @@ export default {
         app.config.globalProperties.$mutations = mutations
         app.config.globalProperties.$dialog = dialog
         app.config.globalProperties.$const = $const
+        app.config.globalProperties.$utils = utils
 
         // 当前的用法，直接在Template的dom元素属性上使用需要加上.value,有点不统一，所以使用方法统一在页面引入getters，将变量放在公共scope上
-        // app.config.globalProperties.$getters = getters
+        app.config.globalProperties.$getters = getters
     }
 }

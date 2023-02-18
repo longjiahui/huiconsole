@@ -134,26 +134,23 @@
 
 // .plan, .task{
     .ant-checkbox{
-        font-size: 1em!important;
-        border-radius: 5px;
+        border-radius: 2px;
         overflow: hidden;
     }
-    .ant-checkbox{
-        top: 0;
-        font-size: 1em;
-    }
-    .ant-checkbox-wrapper{
-        font-size: 1em !important;
-        align-items: center;
-        align-self: center;
-    }
-    .ant-checkbox-wrapper::after{
-        display: none;
-    }
+    // .ant-checkbox{
+    //     top: 0;
+    //     font-size: 1em;
+    // }
+    // .ant-checkbox-wrapper{
+    //     font-size: 1em !important;
+    //     align-items: center;
+    //     align-self: center;
+    // }
+    // .ant-checkbox-wrapper::after{
+    //     display: none;
+    // }
     .ant-checkbox-inner{
-        width: 1em!important;
-        height: 1em!important;
-        border-radius: 5px!important;
+        border-radius: 2px!important;
     }
 // }
 

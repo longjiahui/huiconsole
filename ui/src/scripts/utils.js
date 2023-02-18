@@ -89,11 +89,28 @@ export default {
         }
     },
     async iterateMap(datas, childrenKey, func){
-        let ret = []
-        this.iterate(datas, childrenKey, d=>{
-            ret.push(func(d))
+        let mapData = []
+        await this.iterate(datas, childrenKey, async d=>{
+            let ret = func(d)
+            if(ret instanceof Promise){
+                ret = await ret
+            }
+            mapData.push(ret)
         })
-        return ret
+        return mapData
+    },
+    async iterateFilter(datas, childrenKey, func){
+        let filterData = []
+        await this.iterate(datas, childrenKey, async d=>{
+            let ret = func(d)
+            if(ret instanceof Promise){
+                ret = await ret
+            }
+            if(ret){
+                filterData.push(d)
+            }
+        })
+        return filterData
     },
 
     setToken(token){
@@ -109,4 +126,26 @@ export default {
             return t
         }, {})
     },
+
+    isin(n, range){
+        range = range.split(',')
+        let [minData, maxData] = range
+        let min = +(minData.slice(1))
+        let ret = true
+        if(minData[0] === '('){
+            ret = n > min
+        }
+        if(ret && minData[1] === '['){
+            ret = n >= min
+        }
+        let max = +(maxData.slice(0, -1))
+        let maxType = maxData.slice(-1)
+        if(ret && maxType === ')'){
+            ret = n < max
+        }
+        if(ret && maxType === ']'){
+            ret = n <= max
+        }
+        return ret
+    }
 }

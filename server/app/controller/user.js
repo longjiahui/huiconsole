@@ -45,7 +45,7 @@ module.exports = app=>class extends app.Controller{
         if(!u){
             throw new app.Error(0, '用户名或密码错误')
         }
-        const token = app.userJWTSign(u.toObject())
+        const token = app.userJWTSign(u)
         this.service.user.setUserTokenAsCookie(token)
         ctx.body = this.service.ret.success(token)
     }
@@ -75,9 +75,10 @@ module.exports = app=>class extends app.Controller{
 
         await ctx.v({
             keyword$: 'string$',
+            role$: 'objectID',
         })
 
-        let { keyword } = ctx.request.body
+        let { keyword, role } = ctx.request.body
         let condition = {}
         if(keyword){
             if(!condition.$or){
@@ -87,6 +88,9 @@ module.exports = app=>class extends app.Controller{
             ;['name', 'username'].forEach(k=>{
                 condition.$or.push({[k]: keywordRegExp})
             })
+        }
+        if(role !== undefined){
+            condition.role = app.ObjectId(role)
         }
         ctx.body = await this.service.ret.pageData({
             model: ctx.model.User,
@@ -136,7 +140,7 @@ module.exports = app=>class extends app.Controller{
         if(!await ctx.model.User.findOne({ _id: myID, password })){
             throw new app.Error(1, '密码错误')
         }
-        ctx.body = this.service.ret.success(app.passwordChangingJWTSign({ _id, password }))
+        ctx.body = this.service.ret.success(app.passwordChangingJWTSign({ _id: myID, password }))
     }
 
     // 非管理员账号使用

@@ -13,7 +13,7 @@
             </div>
             <div class="h justify-flex-end">
                 <a-input @keyup.enter="handleSave" v-if="!isEdit" v-model:value="lUser.password" placeholder="初始化密码" type="password"></a-input>
-                <a-button v-else-if="isImAdmin || user._id === myID" @click="handleModifyPassword">修改密码</a-button>
+                <a-button v-else-if="$getters.isImAdmin || user._id === $getters.myID" @click="handleModifyPassword">修改密码</a-button>
             </div>
             <div class="h h-s justify-flex-end">
                 <a-select v-model:value="lUser.role" placeholder="选择角色" style="width: 150px" :options="roles.map(r=>({
@@ -37,8 +37,6 @@ import extend from 'extend'
 import md5 from 'md5'
 import { message } from 'ant-design-vue'
 
-let { isImAdmin, myID } = getters
-
 let props = defineProps({
     user: {
         type: Object,
@@ -49,7 +47,7 @@ let props = defineProps({
 let roles = ref([])
 let isInited = ref(false)
 
-api.role.all().then(data=>{
+api.role.dict().then(data=>{
     roles.value = data
 }).finally(()=>isInited.value = true)
 
@@ -81,11 +79,11 @@ function handleSave(){
 
 async function handleModifyPassword(){
     if(isEdit.value){
-        console.debug('before change password(isImAdmin): ', isImAdmin.value)
+        console.debug('before change password(isImAdmin): ', getters.isImAdmin)
         // 普通用户只能修改自己的信息，管理员可以修改任何用户的信息
-        if(isImAdmin.value){
+        if(getters.isImAdmin){
             let to = await dialog.openInputDialog({
-                desc: `请输入 ${props.user?.name || props.user?.username} 的密码`,
+                desc: `请输入需要修改成`,
                 validates: [[val=>!!val, '密码不能为空']],
             })
             await api.user.changePassword({
@@ -95,7 +93,7 @@ async function handleModifyPassword(){
         }else{
             // 我不是管理员
             let token = await dialog.openInputDialog({
-                desc: `请输入 ${props.user?.name || props.user?.username} 的密码`,
+                desc: `请输入 ${props.user?.name || props.user?.username} 的密码用以确认你有权限修改。`,
                 type: 'password',
                 validates: [[val=>!!val, '密码不能为空']],
             }).then(to=>api.user.getChangingPasswordToken({

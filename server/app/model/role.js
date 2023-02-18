@@ -3,12 +3,12 @@ module.exports = app => {
     const Schema = mongoose.Schema
 
     var RoleSchema = new Schema({
-        name: {
+        // 业务后管系统使用的字段
+        key: {
             type: String,
             unique: true,
         },
-        // 业务后管系统使用的字段，可以不填
-        key: String,
+        name: String,
         description: String,
         isAdmin: Boolean,
         menus: [{

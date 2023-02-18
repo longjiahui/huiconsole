@@ -20,7 +20,7 @@
                     </template>
                 </a-input>
             </div>
-            <a-button type="primary">登录</a-button>
+            <a-button @click="handleLogin" type="primary">登录</a-button>
         </div>
         <div v-else class="card p-l v v-m align-center">
             <h1>HUI CONSOLE</h1>

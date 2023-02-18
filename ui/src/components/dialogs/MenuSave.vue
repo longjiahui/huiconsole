@@ -17,7 +17,7 @@
                 <component v-if="lMenu.icon" :is="lMenu.icon" />
             </div>
             <div class="f-1">
-                <a-input v-model:value="lMenu.name" placeholder="菜单名称"></a-input>
+                <a-input v-focus v-model:value="lMenu.name" placeholder="菜单名称"></a-input>
             </div>
         </div>
         <div>

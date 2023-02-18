@@ -1,11 +1,16 @@
-import { createApp, reactive, ref, h } from "vue"
+import { createApp, reactive, ref, h, resolveComponent } from "vue"
 
 import MenuSaveDialog from '@/components/dialogs/MenuSave.vue'
 import IconPickerDialog from '@/components/dialogs/IconPicker.vue'
 import UserSaveDialog from '@/components/dialogs/UserSave.vue'
 import InputDialog from '@/components/dialogs/Input.vue'
+import RoleSaveDialog from '@/components/dialogs/RoleSave.vue'
+import RoleMenuSaveDialog from '@/components/dialogs/RoleMenuSave.vue'
+import QuickCheckUsersRoleDialog from '@/components/dialogs/QuickCheckUsersRole.vue'
 
 import plugins from '@/scripts/plugins'
+
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
 
 let openedDialogs = {}
 
@@ -32,18 +37,17 @@ let dialogs = {
                     DialogComponent
                 },
                 render(){
-                    return h(DialogComponent, {
+                    let dialog = h(DialogComponent, {
                         visible: visible.value,
                         'onUpdate:Visible': val=>visible.value = val,
                         ...params,
                         onR: r,
                         onReject: reject,
                     })
-                    // return <dialog-component
-                    //     v-model={[visible.value, 'visible']}
-                    //     {...params}
-                    //     onR={r}
-                    //     onReject={reject}></dialog-component>
+                    let configProvider = h(resolveComponent('a-config-provider'), {
+                        locale: zhCN,
+                    }, dialog)
+                    return configProvider
                 }
             })
             app.use(plugins)
@@ -70,6 +74,9 @@ let dialogs = {
     ['IconPickerDialog', IconPickerDialog],
     ['UserSaveDialog', UserSaveDialog],
     ['InputDialog', InputDialog],
+    ['RoleSaveDialog', RoleSaveDialog],
+    ['RoleMenuSaveDialog', RoleMenuSaveDialog],
+    ['QuickCheckUsersRoleDialog', QuickCheckUsersRoleDialog],
 ].forEach(d=>{
     let key = d[0]
     let DialogComponent = d[1]

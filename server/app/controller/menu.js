@@ -1,16 +1,23 @@
 const sortPipeline = [{$sort: { order: 1 }}]
 
 module.exports = app => class extends app.Controller{
+
     async pageData(ctx){
+        let user = ctx.state.user
+        let newestUser = await this.service.user.getFullUserByID(user._id)
+        let menusFilter = []
+        if(!newestUser?.role?.isAdmin){
+            menusFilter = [{$match: { _id: {$in: newestUser.role.menus || []}}}]
+        }
         ctx.body = await this.service.ret.pageDataByAggregate({
             model: ctx.model.Menu,
             pipeline: [{
                 $match: {
                     parent: null,
                 }
-            }],
-            sortPipeline,
-            suffixPipeline: [...this.service.menu.createSubMenusLookupOption(sortPipeline)]
+            }, ...menusFilter ],
+            sortPipeline: sortPipeline,
+            suffixPipeline: [...this.service.menu.createSubMenusLookupOption([...menusFilter, ...sortPipeline])]
         })
     }
 

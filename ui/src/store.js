@@ -28,7 +28,7 @@ export const mutations = {
     }
 }
 
-export const getters = {
+export const getters = reactive({
     isLoading: computed(()=>state.loadingCounter > 0),
     myInfo: utils.createAsyncComputed(()=>state.token, async ()=>{
         if(state.token){
@@ -37,7 +37,8 @@ export const getters = {
             return {}
         }
     }),
-    isImAdmin: computed(()=>!!getters.myInfo.value?.role?.isAdmin),
-    myID: computed(()=>getters.myInfo.value?._id),
-    isLogin: computed(()=>!!getters.myID.value),
-}
+    isImAdmin: computed(()=>!!getters.myInfo?.role?.isAdmin),
+    myID: computed(()=>getters.myInfo?._id),
+    myRoleID: computed(()=>getters.myInfo?.role?._id),
+    isLogin: computed(()=>!!getters.myID),
+})

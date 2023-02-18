@@ -1,13 +1,11 @@
 <script setup>
 import { getters } from '@/store'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
-
-let { isLoading } = getters
 </script>
 
 <template>
   <a-config-provider :locale="zhCN">
-    <div class="v size-full overflow-overlay" v-loading="isLoading">
+    <div class="v size-full overflow-overlay" v-loading="$getters.isLoading">
       <router-view v-slot="{ Component, route }">
         <transition name="anfo-fade-tr" mode="out-in" appear>
           <component :is="Component" class="f-1" />

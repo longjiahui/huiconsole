@@ -40,7 +40,7 @@
             <template #bodyCell="{ column, record, index, text }">
                 <div v-if="column.key === 'operation'" @click.stop>
                     <a-popconfirm
-                        v-if="myID !== record._id"
+                        v-if="$getters.myID !== record._id"
                         title="确定删除吗？"
                         @confirm="handleDelete(record, index)">
                         <button class="button error">
@@ -70,8 +70,6 @@ import dialog from '@/scripts/dialog'
 import { getters } from '@/store'
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { debounce } from 'throttle-debounce'
-
-let { myID } = getters
 
 let isLoading = ref(false)
 let users = ref([])
@@ -108,7 +106,6 @@ function handleNewUser(){
     })
 }
 function handleEditUser(user, i){
-    console.debug(arguments)
     dialog.openUserSaveDialog({user}).then(data=>{
         Object.assign(user, data)
     })

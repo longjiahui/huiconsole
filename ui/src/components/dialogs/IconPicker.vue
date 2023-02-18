@@ -4,7 +4,7 @@
         :footer="null"
         :closable="false">
         <div class="p-h-l p-t-m">
-            <a-input v-model:value="keywords" placeholder="DeleteOutlined"></a-input>
+            <a-input v-focus v-model:value="keywords" placeholder="DeleteOutlined"></a-input>
         </div>
         <div class="p-l icon-container overflow-auto">
             <div @click="$emit('r', icon)" v-for="icon in finalIcons" class="icon-item h justify-center clickable">
