@@ -1,7 +1,7 @@
 <template>
     <slot name="layout" v-bind="{
-        Tabs: ()=>h($slots.tabs, context),
-        Content: ()=>h($slots.content, context),
+        Tabs: $slots.tabs,
+        Content: $slots.content,
         Sidebar: $slots.sidebar,
         ...context,
         isInited,
@@ -35,6 +35,7 @@ let tabs = ref(utils.getLocal('tabs', []).map(t=>{
     t.component = buildComponentFromTab(t)
     return t
 }))
+let currentTab = computed(()=>tabs.value.find(t=>t.id === currentTabID.value))
 
 let menus = ref([])
 // 初始化标志
@@ -55,6 +56,9 @@ Promise.all([
         // 决定是否修改currentTabID
         if(!currentTabID.value && tabs.value?.length > 0){
             currentTabID.value = tabs.value?.[0]?.id
+        }
+        if(currentTabID.value && !currentTab.value){
+            currentTabID.value = ''
         }
     })
 ]).finally(()=>{
@@ -86,7 +90,6 @@ const configRolesMenusItem = {
 let iframeTabs = computed(()=>tabs.value.filter(t=>t.type === $const.menuType.iframe))
 let componentTabs = computed(()=>tabs.value.filter(t=>t.type === $const.menuType.component))
 let tabStack = computed(()=>[...tabs.value].sort((a,b)=>a._lastActive - b._lastActive))
-let currentTab = computed(()=>tabs.value.find(t=>t.id === currentTabID.value))
 watch(tabs, val=>{
     utils.setLocal('tabs', val)
 }, { deep: true })

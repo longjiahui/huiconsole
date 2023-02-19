@@ -7,7 +7,6 @@ services:
       - 8080:8080
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./huiconsole.config.js:/app/huiconsole.js
 
   ui:
     build:
@@ -19,6 +18,7 @@ services:
       - mongo
     volumes:
       - ./run/logs:/app/logs/huiconsole-prod
+      - ./huiconsole.config.js:/app/huiconsole.config.js
 
   mongo:
     image: mongo:6.0.3

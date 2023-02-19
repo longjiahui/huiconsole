@@ -9,8 +9,8 @@
                             <!-- sidebar -->
                             <component :is="context.Sidebar" v-bind="context"></component>
                             <div class="main-main f-1 v v-m">
-                                <component :is="context.Tabs"></component>
-                                <component :is="context.Content"></component>
+                                <component :is="context.Tabs" v-bind="context"></component>
+                                <component :is="context.Content" v-bind="context"></component>
                             </div>
                         </div>
                     </div>
