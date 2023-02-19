@@ -48,7 +48,7 @@ module.exports = app => class extends app.Controller{
         }
         let createdMenu = await this.service.basic.save({
             model: ctx.model.Menu,
-            fields: 'parent name icon data isTransparent',
+            fields: 'order parent name icon data isTransparent',
         })
         if(!!parent){
             await ctx.model.Menu.updateOne({_id: parent}, {$addToSet: {subMenus: createdMenu._id}})

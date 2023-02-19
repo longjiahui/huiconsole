@@ -36,6 +36,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue'
 import api from '@/scripts/api'
+import utils from '@/scripts/utils'
 import dialog from '@/scripts/dialog'
 import { DeleteOutlined, FolderOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons-vue'
 
@@ -47,7 +48,11 @@ api.menu.pageData().then(data=>{
 
 function handleNewMenu(){
     dialog.openMenuSaveDialog().then(data=>{
-        menus.value.push(data)
+        menus.value.unshift(data)
+        // 顶层排序reset
+        api.menu.resetOrders({
+            orders: menus.value.map((item, i)=>[item._id, i])
+        })
     })
 }
 function handleNewSubMenu(parent){
@@ -94,10 +99,16 @@ function handleChange({ treeData, value, dropValue, index, parent } = {}){
 }
 
 function handleDeleteMenu(menu, datas, i){
+    // 不能用datas.splice(i, 1) 因为datas是组件中新生成的于menus是不同的引用
     api.menu.delete({
         _id: menu._id,
     }).then(()=>{
-        datas.splice(i, 1)
+        return utils.iterate(menus.value, 'subMenus', (item, i, datas)=>{
+            if(item._id === menu._id){
+                datas.splice(i, 1)
+                return true
+            }
+        })
     })
 }
 </script>

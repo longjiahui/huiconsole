@@ -57,7 +57,8 @@ let title = computed(()=>(isEdit.value ? '编辑' : '新建') + (!!lMenu.value?.
 let type = computed(()=>business.getMenuType(lMenu.value))
 
 function handleConfirm(){
-    let menu = utils.limitKeys(lMenu.value, ['isTransparent', '_id', 'name', 'data', 'icon', 'parent'])
+    let menu = utils.limitKeys(lMenu.value, ['isTransparent', '_id', 'name', 'data', 'icon', 'parent', 'order'])
+    menu.order = menu.order ||  0
     api.menu.save(menu).then(data=>{
         emit('r', data)
     })

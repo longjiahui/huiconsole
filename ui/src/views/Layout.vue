@@ -358,7 +358,7 @@ $navHeight: 48px;
 .main-tab{
     min-width: 72px;
     border-radius: 3px;
-    transition: background .3s, color .3s;
+    transition: color .3s;
     background: linear-gradient(45deg, lighten($primaryColor, 15%), lighten($primaryColor, 10%));
     color: $primaryTextColor;
     position: relative;
@@ -366,7 +366,8 @@ $navHeight: 48px;
 
     &.is-current{
         color: $primaryColor;
-        background: whitesmoke;
+        background: linear-gradient(45deg, white 90%, lightgray);
+        // background: whitesmoke;
     }
 }
 
@@ -396,7 +397,7 @@ $navHeight: 48px;
     @mixin focus{
         color: $primaryTextColor;
         background: $primaryColor;
-        background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 10%));
+        // background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 10%));
     }
     &:hover {
         @include focus;
