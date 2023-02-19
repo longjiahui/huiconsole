@@ -192,7 +192,7 @@ $navHeight: 40px;
     transition: background .3s, padding .3s, color .3s;
     cursor: pointer;
     background: rgba(0, 0, 0, calc(.04 + var(--layer) * .05));
-    padding: 8px 8px;
+    padding: 12px 8px;
     padding-left: calc(8px + var(--layer) * 16px);
     
     &.has-children{
