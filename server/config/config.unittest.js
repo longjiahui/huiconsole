@@ -4,6 +4,6 @@ module.exports = {
     consoleLevel: 'NONE', 
     level: 'NONE', 
     logger: {
-        dir: path.resolve(path.join('logs', 'blog-unittest')),
+        dir: path.resolve(path.join('logs', 'huiconsole-unittest')),
     },
 }

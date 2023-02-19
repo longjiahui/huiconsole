@@ -1,9 +1,3 @@
-
-import { BgColorsOutlined } from '@ant-design/icons-vue';
-
-
-import { FontColorsOutlined } from '@ant-design/icons-vue';
-
 <template>
     <div class="size-full">
         <hui-console>

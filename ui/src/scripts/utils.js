@@ -12,18 +12,6 @@ export default {
     ...utils,
     dayjs,
 
-    getBlogImageURL(img, width = 10, height = 10){
-        const base = '//blog-1252925346.cos.ap-guangzhou.myqcloud.com'
-        if(img.indexOf(base) >= 0){
-            let size = ''
-            if(width && height){
-                return `${img}?imageMogr2/thumbnail/!${width}x${height}r`
-            }
-        }else{
-            return img
-        }
-    },
-
     getElementAttrRelatedToRoot(el, key){
         if(el.offsetElement){
             return el[key] + this.getElementAttrRelatedToRoot(el.offsetElement, key)

@@ -1,6 +1,4 @@
 
-import { SwitcherOutlined } from '@ant-design/icons-vue';
-
 <template>
     <div class="size-full">
         <hui-console>

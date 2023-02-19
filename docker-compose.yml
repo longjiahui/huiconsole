@@ -17,7 +17,7 @@ services:
     depends_on:
       - mongo
     volumes:
-      - ./run/logs:/root/logs
+      - ./run/logs:/app/logs/huiconsole-prod
 
   mongo:
     image: mongo:6.0.3
