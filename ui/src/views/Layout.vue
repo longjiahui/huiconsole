@@ -45,7 +45,7 @@ import { SwitcherOutlined } from '@ant-design/icons-vue';
                                         </a-menu-item>
                                         <a-menu-item @click="$router.replace({name: 'legacy', params: {...$route.params}})">
                                             <div class="h h-xs">
-                                                <SwitcherOutlined />
+                                                <BgColorsOutlined />
                                                 <div>切换Legacy主题</div>
                                             </div>
                                         </a-menu-item>

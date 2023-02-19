@@ -6,7 +6,7 @@ import zhCN from 'ant-design-vue/es/locale/zh_CN'
   <a-config-provider :locale="zhCN">
     <div class="v size-full overflow-overlay" v-loading="$getters.isLoading">
       <router-view v-slot="{ Component, route }">
-        <transition name="anfo-fade" mode="out-in" appear>
+        <transition name="anfo-fade-fast" mode="out-in" appear>
           <component :is="Component" class="f-1" />
         </transition>
       </router-view>

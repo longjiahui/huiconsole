@@ -1,3 +1,9 @@
+
+import { BgColorsOutlined } from '@ant-design/icons-vue';
+
+
+import { FontColorsOutlined } from '@ant-design/icons-vue';
+
 <template>
     <div class="size-full">
         <hui-console>
@@ -42,7 +48,7 @@
                                         </a-menu-item>
                                         <a-menu-item @click="$router.replace({name: $const.routes.default, params: {...$route.params}})">
                                             <div class="h h-xs">
-                                                <SwitcherOutlined />
+                                                <BgColorsOutlined />
                                                 <div>切换默认主题</div>
                                             </div>
                                         </a-menu-item>
@@ -159,7 +165,7 @@
 </template>
 
 <style lang="scss" scoped>
-$primaryColor: #2d3f53;
+$primaryColor: #2d60b1;
 .page-layout{
     color: darken($primaryColor, 15%)!important;
 }
