@@ -1,12 +1,16 @@
 const validateSchema = require('../app/lib/validateSchema')
 const $const = require('../app/lib/const')
 
+// 读取配置文件 获取配置
+let huiConsoleConfig = require('../huiconsole.config.js')
+let { server: huiConsoleServerConfig } = huiConsoleConfig || {}
+
 module.exports = app=>({
-    keys: 'my-cookie-secret-key',
+    keys: 'huiconsole-cookie-key',
     middleware: ['error', 'log'],
     jwtSecret: {
-        user: 'test-haha',
-        passwordChanging: 'test-haha2',
+        user: 'huiconsole-jwtsecret',
+        passwordChanging: 'huiconsole-jwtsecret2',
     },
 
     static: {
@@ -35,4 +39,5 @@ module.exports = app=>({
     validateSchema,
 
     ...$const,
+    ...huiConsoleServerConfig,
 })
