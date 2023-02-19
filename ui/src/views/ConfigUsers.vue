@@ -38,7 +38,7 @@
             })"
             row-key="_id">
             <template #bodyCell="{ column, record, index, text }">
-                <div v-if="column.key === 'operation'" @click.stop>
+                <div v-if="column.key === 'operation'" class="h justify-center" @click.stop>
                     <a-popconfirm
                         v-if="$getters.myID !== record._id"
                         title="确定删除吗？"

@@ -1,18 +1,20 @@
 <template>
 <div v-loading="isLoading" class="page h justify-center" style="background: whitesmoke">
     <transition mode="out-in" name="anfo-fade">
-        <div v-if="isAdminRegistered" class="card p-l v v-m align-center">
-            <h1>HUI CONSOLE</h1>
-            <p class="desc">欢迎使用HUI CONSOLE后台管理系统</p>
-            <div class="v v-m">
-                <a-input v-focus placeholder="用户名"
+        <div v-if="isAdminRegistered" class="card">
+            <div class="block-header p-h-l p-v-l p-b-m v-s">
+                <div class="title" style="font-size: 1.5em">HUI CONSOLE</div>
+                <div class="desc">后台管理系统</div>
+            </div>
+            <div class="block-content v v-m p-h-l p-v-m">
+                <a-input class="draw-style" v-focus placeholder="用户名"
                     v-model:value="username"
                     @keyup.enter="handleLogin">
                     <template #prefix>
                         <UserOutlined/>
                     </template>
                 </a-input>
-                <a-input type="password" placeholder="密码"
+                <a-input class="draw-style" type="password" placeholder="密码"
                     v-model:value="password"
                     @keyup.enter="handleLogin">
                     <template #prefix>
@@ -20,19 +22,27 @@
                     </template>
                 </a-input>
             </div>
-            <a-button @click="handleLogin" type="primary">登录</a-button>
+            <div class="block-footer p-h-l p-v-m v">
+                <button class="button primary" @click="handleLogin" type="primary">登录</button>
+            </div>
         </div>
-        <div v-else class="card p-l v v-m align-center">
-            <h1>HUI CONSOLE</h1>
-            <p class="desc">初次进入，请输入初始管理员密码</p>
-            <a-input type="password" v-focus placeholder="密码"
-                    v-model:value="adminPassword"
-                    @keyup.enter="handleRegisterAdmin">
-                <template #prefix>
-                    <KeyOutlined/>
-                </template>
-            </a-input>
-            <a-button type="primary" @click="handleRegisterAdmin">进入系统</a-button>
+        <div v-else class="card">
+            <div class="block-header p-h-l p-v-l p-b-m v-s">
+                <div class="title" style="font-size: 1.5em">HUI CONSOLE</div>
+                <div class="desc">初次进入，请输入初始管理员密码</div>
+            </div>
+            <div class="block-content p-h-l p-v-m">
+                <a-input class="draw-style" type="password" v-focus placeholder="密码"
+                        v-model:value="adminPassword"
+                        @keyup.enter="handleRegisterAdmin">
+                    <template #prefix>
+                        <KeyOutlined/>
+                    </template>
+                </a-input>
+            </div>
+            <div class="block-footer p-h-l p-v-m v">
+                <button class="button primary" @click="handleRegisterAdmin">进入系统</button>
+            </div>
         </div>
     </transition>
 </div>
@@ -40,13 +50,11 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import md5 from 'md5'
 
 import api from '@/scripts/api'
 import { mutations } from '@/store'
 
-let router = useRouter()
 
 let isLoading = ref(true)
 let isAdminRegistered = ref(true)
@@ -63,9 +71,11 @@ api.user.isAdminRegistered().then(data => {
 
 function handleRegisterAdmin(){
     let password = adminPassword.value
-
+    isLoading.value = true
     api.user.registerAdmin({
         password: md5(password)
+    }).finally(()=>{
+        isLoading.value = false
     }).then(token=>{
         adminPassword.value = ''
         mutations.login(token)
@@ -73,9 +83,12 @@ function handleRegisterAdmin(){
 }
 
 function handleLogin(){
+    isLoading.value = true
     api.user.login({
         username: username.value,
         password: md5(password.value),
+    }).finally(()=>{
+        isLoading.value = false
     }).then(token=>{
         username.value = ''
         password.value = ''
@@ -85,4 +98,7 @@ function handleLogin(){
 </script>
 
 <style lang="scss" scoped>
+.block-content{
+    background: whitesmoke;
+}
 </style>

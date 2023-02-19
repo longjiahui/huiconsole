@@ -40,6 +40,12 @@
                                                 <div>退出登录</div>
                                             </div>
                                         </a-menu-item>
+                                        <a-menu-item @click="$router.replace({name: $const.routes.default, params: {...$route.params}})">
+                                            <div class="h h-xs">
+                                                <SwitcherOutlined />
+                                                <div>切换默认主题</div>
+                                            </div>
+                                        </a-menu-item>
                                     </a-menu>
                                 </template>
                             </a-dropdown>
@@ -96,7 +102,7 @@
                                         <DeleteOutlined class="clickable" @click="setContext({tabs: []})" />
                                     </a-tooltip>
                                 </div>
-                                <div v-else-if="!tabs?.length > 0" class="p-h-s desc">没有打开的标签页</div>
+                                <div v-else-if="!tabs?.length > 0" class="p-h-s">没有打开的标签页</div>
                             </transition>
                         </div>
                         <div class="f-1">
@@ -109,7 +115,7 @@
                                 <template #="{ data: t, i }">
                                     <div @click="setContext({currentTabID: t.id})"
                                     style="height: 100%"
-                                        :class="['main-tab p-h-s h h-s', t.id === currentTabID ? 'is-current':'']">
+                                        :class="['main-tab p-h-m h h-s', t.id === currentTabID ? 'is-current':'']">
                                         <!-- {{ t.id }} -->
                                         <div v-if="t.menu?.icon"><component :is="t.menu?.icon"></component></div>
                                         <div class="f-1" style="word-break: break-all;">
@@ -135,10 +141,9 @@
                             v-show="currentTabID === t.id" class="size-full overflow-hidden">
                             <component :is="t.component"></component>
                         </div>
-                        <transition name="anfo-fade-tr" appear>
+                        <!-- <transition name="anfo-fade" appear>
                             <div v-if="!currentTab"
-                                style="background: linear-gradient(45deg, whitesmoke, lightgray)!important;"
-                                class="size-full v v-m align-center justify-center">
+                                class="size-full p-l v-s">
                                 <h1 class="title">HUI CONSOLE</h1>
                                 <p class="desc">longjiahui@hotmail.com</p>
                                 <div>欢迎使用 <span class="title">HUI CONSOLE</span></div>
@@ -146,7 +151,7 @@
                                     还没有菜单数据，点击创建
                                 </div>
                             </div>
-                        </transition>
+                        </transition> -->
                     </div>
             </template>
         </hui-console>
@@ -154,6 +159,17 @@
 </template>
 
 <style lang="scss" scoped>
+$primaryColor: #2d3f53;
+.page-layout{
+    color: darken($primaryColor, 15%)!important;
+}
+.title{
+    color: $primaryColor;
+}
+.desc{
+    color: lighten($primaryColor, 40%);
+}
+
 $navHeight: 40px;
 .sidebar{
     width: 200px;
@@ -191,12 +207,12 @@ $navHeight: 40px;
 .menu-item{
     transition: background .3s, padding .3s, color .3s;
     cursor: pointer;
-    background: rgba(0, 0, 0, calc(.04 + var(--layer) * .05));
+    background: rgba($primaryColor, calc(.04 + var(--layer) * .05));
     padding: 12px 8px;
     padding-left: calc(8px + var(--layer) * 16px);
     
     &.has-children{
-        background: rgba(0, 0, 0, calc(var(--layer) * .05));
+        background: rgba($primaryColor, calc(var(--layer) * .05));
     }
     
     @mixin focus{

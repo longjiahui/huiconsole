@@ -30,13 +30,33 @@ let currentTabID = computed({
     }
 })
 
+let tabs = ref(utils.getLocal('tabs', []).map(t=>{
+    t.type = business.getMenuType(t.menu)
+    t.component = buildComponentFromTab(t)
+    return t
+}))
+
 let menus = ref([])
 watch(menus, val=>console.debug(val))
 // 初始化标志
 let isInited = ref(false)
 Promise.all([
-    api.menu.pageData().then(data=>{
+    api.menu.pageData().then(async data=>{
         menus.value = data.data
+
+        // 决定是否默认打开一个tab
+        if(menus.value?.length > 0 && !(tabs.value?.length > 0)){
+            await utils.iterate(menus.value, 'subMenus', m=>{
+                if(!(m.subMenus?.length > 0)){
+                    openTab(m)
+                    return true
+                }
+            })
+        }
+        // 决定是否修改currentTabID
+        if(!currentTabID.value && tabs.value?.length > 0){
+            currentTabID.value = tabs.value?.[0]?.id
+        }
     })
 ]).finally(()=>{
     isInited.value = true
@@ -63,12 +83,6 @@ const configRolesMenusItem = {
     icon: 'SettingOutlined',
     data: 'views/ConfigRoles',
 }
-
-let tabs = ref(utils.getLocal('tabs', []).map(t=>{
-    t.type = business.getMenuType(t.menu)
-    t.component = buildComponentFromTab(t)
-    return t
-}))
 
 let iframeTabs = computed(()=>tabs.value.filter(t=>t.type === $const.menuType.iframe))
 let componentTabs = computed(()=>tabs.value.filter(t=>t.type === $const.menuType.component))

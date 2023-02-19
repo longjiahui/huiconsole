@@ -1,3 +1,6 @@
+
+import { SwitcherOutlined } from '@ant-design/icons-vue';
+
 <template>
     <div class="size-full">
         <hui-console>
@@ -38,6 +41,12 @@
                                             <div class="h h-xs">
                                                 <LogoutOutlined />
                                                 <div>退出登录</div>
+                                            </div>
+                                        </a-menu-item>
+                                        <a-menu-item @click="$router.replace({name: 'legacy', params: {...$route.params}})">
+                                            <div class="h h-xs">
+                                                <SwitcherOutlined />
+                                                <div>切换Legacy主题</div>
                                             </div>
                                         </a-menu-item>
                                     </a-menu>
@@ -104,7 +113,7 @@
                                         <DeleteOutlined class="clickable" @click="setContext({tabs: []})" />
                                     </a-tooltip>
                                 </div>
-                                <div v-else-if="!tabs?.length > 0" class="p-h-s desc">没有打开的标签页</div>
+                                <div v-else-if="!tabs?.length > 0" class="p-h-s">没有打开的标签页</div>
                             </transition>
                         </div>
                         <div class="f-1">
@@ -143,9 +152,9 @@
                             v-show="currentTabID === t.id" :class="['size-full overflow-hidden', t?.menu?.isTransparent ? '':'card']">
                             <component :is="t.component"></component>
                         </div>
-                        <transition name="anfo-fade-tr" appear>
+                        <!-- <transition name="anfo-fade" appear>
                             <div v-if="!currentTab"
-                                style="background: linear-gradient(45deg, whitesmoke, lightgray)!important;"
+                                style="background: linear-gradient(45deg, whitesmoke, darken(whitesmoke, 5%))!important;"
                                 class="card size-full v v-m align-center justify-center">
                                 <h1 class="title">HUI CONSOLE</h1>
                                 <p class="desc">longjiahui@hotmail.com</p>
@@ -154,7 +163,7 @@
                                     还没有菜单数据，点击创建
                                 </div>
                             </div>
-                        </transition>
+                        </transition> -->
                     </div>
             </template>
         </hui-console>
@@ -168,7 +177,6 @@ $navHeight: 48px;
     // background: whitesmoke;
 
     .brand{
-        border: 1px solid $primaryColor;
         color: $primaryTextColor;
         background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 5%));
         height: $navHeight;
@@ -183,7 +191,6 @@ $navHeight: 48px;
     background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 5%));
     overflow: hidden;
     border-radius: 5px;
-    border: 1px solid $primaryColor;
     color: $primaryTextColor;
 }
 .main-tab{
@@ -204,11 +211,11 @@ $navHeight: 48px;
 .menu-item{
     transition: background .3s, padding .3s, color .3s;
     cursor: pointer;
-    background: rgba(0, 0, 0, calc(.04 + var(--layer) * .05));
+    background: rgba($primaryColor, calc(.04 + var(--layer) * .05));
     padding: 8px 8px;
     
     &.has-children{
-        background: rgba(0, 0, 0, calc(var(--layer) * .05));
+        background: rgba($primaryColor, calc(var(--layer) * .05));
         box-shadow: rgba(0, 0, 0, .14) 0 0 24px;
     }
     &.has-top-left-radius{

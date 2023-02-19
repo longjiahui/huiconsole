@@ -7,12 +7,12 @@ let router = createRouter({
     routes: [{
         path: '/legacy/:base64Params?',
         props: true,
-        name: $const.routes.default,
+        name: 'legacy',
         component: () => import('@/views/LayoutLegacy.vue'),
     }, {
         path: '/:base64Params?',
         props: true,
-        name: 'legacy',
+        name: $const.routes.default,
         component: () => import('@/views/Layout.vue'),
     }, {
         path: '/login',
