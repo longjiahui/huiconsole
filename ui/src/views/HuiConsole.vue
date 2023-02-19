@@ -37,7 +37,6 @@ let tabs = ref(utils.getLocal('tabs', []).map(t=>{
 }))
 
 let menus = ref([])
-watch(menus, val=>console.debug(val))
 // 初始化标志
 let isInited = ref(false)
 Promise.all([

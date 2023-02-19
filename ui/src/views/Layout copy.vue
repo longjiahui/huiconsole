@@ -269,7 +269,6 @@ function buildComponentFromTab(tab){
                         })
                     }
                 })
-                console.debug(isTransparent)
                 return ()=>withDirectives(h('div', {
                     class: isTransparent ? 'size-full' : 'card size-full overflow-hidden',
                 }, h('iframe', {
