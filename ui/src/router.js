@@ -5,9 +5,14 @@ import $const from '@/const'
 let router = createRouter({
     history: createWebHashHistory(),
     routes: [{
-        path: '/:base64Params?',
+        path: '/legacy/:base64Params?',
         props: true,
         name: $const.routes.default,
+        component: () => import('@/views/LayoutLegacy.vue'),
+    }, {
+        path: '/:base64Params?',
+        props: true,
+        name: 'legacy',
         component: () => import('@/views/Layout.vue'),
     }, {
         path: '/login',

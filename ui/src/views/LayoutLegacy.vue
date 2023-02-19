@@ -3,11 +3,11 @@
         <hui-console>
             <template #layout="context">
                 <div v-loading="!context.isInited" class="size-full">
-                    <div class="page-layout size-full v v-m p-m">
-                        <div v-show="context.isInited" class="f-1 shrink-0 h align-stretch h-m">
+                    <div class="page-layout size-full v">
+                        <div v-show="context.isInited" class="f-1 shrink-0 h align-stretch">
                             <!-- sidebar -->
                             <component :is="context.Sidebar" v-bind="context"></component>
-                            <div class="main-main f-1 v v-m">
+                            <div class="main-main f-1 v">
                                 <component :is="context.Tabs"></component>
                                 <component :is="context.Content"></component>
                             </div>
@@ -16,9 +16,9 @@
                 </div>
             </template>
             <template #sidebar="{ openTab, isInited, menus, currentTab, configRolesMenusItem, configMenusMenuItem, configUsersMenusItem, setContext, }">
-                <div class="sidebar v-m shrink-0">
-                    <div class="title h justify-flex-end">
-                        <div class="card brand h h-s p-h-m" style="border-radius: 5px">
+                <div class="sidebar shrink-0">
+                    <div class="title">
+                        <div class="brand h justify-space-between p-h-m">
                             <div>HUI CONSOLE</div>
                             <a-dropdown>
                                 <div class="clickable">
@@ -46,13 +46,12 @@
                         </div>
                     </div>
                     <div v-if="isInited">
-                        <transition name="anfo-fade-tr" appear mode="out-in">
+                        <transition name="anfo-fade" mode="out-in">
                             <anfo-loop
+                                transition-name=""
                                 v-if="menus?.length > 0"
-                                style="border-radius: 5px;padding-left: 0"
                                 :datas="menus"
                                 data-key="_id"
-                                container-class="p-l-m"
                                 children-key="subMenus">
                                 <template #="{ item: m, i, hasChildren, prevHasChildren, datas, toggle, isFold, isLast, isFirst }">
                                     <div
@@ -60,16 +59,9 @@
                                             'f-1 menu-item h h-s',
                                             m._id === currentTab?.menu?._id ? 'is-current':'',
                                             hasChildren ? 'has-children':'',
-
-                                            // 左上角圆角情况
-                                            prevHasChildren ? 'has-top-left-radius':'',
-                                            // 左下角圆角的情况 hasChildren || 树迭代的最后一个
-                                            hasChildren || isLast ? 'has-bottom-left-radius':'',
-                                            isLast ? 'has-bottom-right-radius':'',
-                                            isFirst ? 'has-top-right-radius has-top-left-radius':'',
                                         ]"
                                         @click="hasChildren ? toggle() : openTab(m)">
-                                        <div class="h h-s f-1 justify-flex-end">
+                                        <div class="h h-s f-1">
                                             <div v-if="m.icon">
                                                 <component :is="m.icon" />
                                             </div>
@@ -86,7 +78,7 @@
                                     </div>
                                 </template>
                             </anfo-loop>
-                            <div v-else class="card p-m v align-flex-end desc">
+                            <div v-else class="p-m v align-flex-end desc">
                                 <div>
                                     暂时没有菜单数据
                                 </div>
@@ -96,8 +88,8 @@
                 </div>
             </template>
             <template #tabs="{ tabs, currentTabID, setContext}">
-                <div class="main-tabs card h h-s p-s align-stretch">
-                        <div class="h h-s" v-if="tabs.length !== 1">
+                <div class="main-tabs h h-s align-stretch">
+                        <div class="h h-s p-l-s" v-if="tabs.length !== 1">
                             <transition name="anfo-fade" mode="out-in">
                                 <div v-if="tabs.length > 1">
                                     <a-tooltip placement="left" title="清除全部标签">
@@ -113,7 +105,7 @@
                                     val.forEach(i=>i.component = tabs.find(t=>t.id === i.id)?.component)
                                     tabs = val
                                 }"
-                                :data-key="d=>d.id" isHorizontal class="h-s">
+                                :data-key="d=>d.id" isHorizontal>
                                 <template #="{ data: t, i }">
                                     <div @click="setContext({currentTabID: t.id})"
                                     style="height: 100%"
@@ -133,20 +125,20 @@
             <template #content="{ currentTab, iframeTabs, componentTabs, currentTabID, menus }">
                 <div class="main-pages f-1">
                         <template v-if="currentTab">
-                            <div class="size-full" v-if="currentTab.type === $const.menuType.component">
+                            <div class="size-full p-m" v-if="currentTab.type === $const.menuType.component">
                                 <keep-alive :include="componentTabs.map(t=>t.id)">
                                     <component :is="currentTab?.component"></component>
                                 </keep-alive>
                             </div>
                         </template>
                         <div v-for="t in iframeTabs" :key="t.id"
-                            v-show="currentTabID === t.id" :class="['size-full overflow-hidden', t?.menu?.isTransparent ? '':'card']">
+                            v-show="currentTabID === t.id" class="size-full overflow-hidden">
                             <component :is="t.component"></component>
                         </div>
                         <transition name="anfo-fade-tr" appear>
                             <div v-if="!currentTab"
                                 style="background: linear-gradient(45deg, whitesmoke, lightgray)!important;"
-                                class="card size-full v v-m align-center justify-center">
+                                class="size-full v v-m align-center justify-center">
                                 <h1 class="title">HUI CONSOLE</h1>
                                 <p class="desc">longjiahui@hotmail.com</p>
                                 <div>欢迎使用 <span class="title">HUI CONSOLE</span></div>
@@ -162,13 +154,11 @@
 </template>
 
 <style lang="scss" scoped>
-$navHeight: 48px;
+$navHeight: 40px;
 .sidebar{
     width: 200px;
-    // background: whitesmoke;
 
     .brand{
-        border: 1px solid $primaryColor;
         color: $primaryTextColor;
         background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 5%));
         height: $navHeight;
@@ -182,13 +172,10 @@ $navHeight: 48px;
     // background: $primaryColor;
     background: linear-gradient(45deg, $primaryColor, lighten($primaryColor, 5%));
     overflow: hidden;
-    border-radius: 5px;
-    border: 1px solid $primaryColor;
     color: $primaryTextColor;
 }
 .main-tab{
     min-width: 72px;
-    border-radius: 3px;
     transition: color .3s;
     background: linear-gradient(45deg, lighten($primaryColor, 15%), lighten($primaryColor, 10%));
     color: $primaryTextColor;
@@ -206,22 +193,10 @@ $navHeight: 48px;
     cursor: pointer;
     background: rgba(0, 0, 0, calc(.04 + var(--layer) * .05));
     padding: 8px 8px;
+    padding-left: calc(8px + var(--layer) * 16px);
     
     &.has-children{
         background: rgba(0, 0, 0, calc(var(--layer) * .05));
-        box-shadow: rgba(0, 0, 0, .14) 0 0 24px;
-    }
-    &.has-top-left-radius{
-        border-top-left-radius: 5px;
-    }
-    &.has-bottom-left-radius{
-        border-bottom-left-radius: 5px;
-    }
-    &.has-top-right-radius{
-        border-top-right-radius: 5px;
-    }
-    &.has-bottom-right-radius{
-        border-bottom-right-radius: 5px;
     }
     
     @mixin focus{
@@ -236,5 +211,8 @@ $navHeight: 48px;
     &.is-current{
         @include focus;
     }
+}
+.main-pages{
+    background: white;
 }
 </style>
