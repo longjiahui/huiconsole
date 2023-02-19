@@ -37,13 +37,13 @@ export default {
                     [routeParamsKey]: base64Params,
                 }})
             },
-            routeKey(key, value){
+            routeKey(key, value, options){
                 let params = context.params.value || {}
                 if(typeof params !== 'object'){
                     params = {}
                 }
                 params[key] = value
-                context.route(params)
+                context.route(params, options)
             }
         }
         return context

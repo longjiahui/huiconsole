@@ -30,7 +30,7 @@
                     </div>
                 </a-button>
                 <div v-else class="desc">系统管理员拥有所有菜单权限</div>
-                <div v-if="isMyRole" class="desc">不能取消自己的管理员权限</div>
+                <div v-if="isMyRole && lRole.isAdmin" class="desc">不能取消自己的管理员权限</div>
                 <div>
                     <!-- 不能取消自己的管理员资格 -->
                     <a-checkbox :disabled="isMyRole" v-model:checked="lRole.isAdmin">系统管理员</a-checkbox>

@@ -1,5 +1,4 @@
 <script setup>
-import { getters } from '@/store'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
 </script>
 
