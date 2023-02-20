@@ -1,11 +1,5 @@
 ## 快速开始
 
-![](//blog-1252925346.cos.ap-guangzhou.myqcloud.com/3cff3f00-b026-11ed-87f6-abda86740c86.iShot_2023-02-19_15.21.45.jpg)
-
-![](//blog-1252925346.cos.ap-guangzhou.myqcloud.com/401b4c10-b026-11ed-87f6-abda86740c86.iShot_2023-02-19_15.21.12.jpg)
-
-![](//blog-1252925346.cos.ap-guangzhou.myqcloud.com/42abe200-b026-11ed-87f6-abda86740c86.iShot_2023-02-19_15.20.57.jpg)
-
 `HUI CONSOLE`本身作为一个独立的模块，提供了前端的后管框架以及后台对用户、角色、菜单菜单权限的数据以及接口功能。开发者只需要专注于使用自己的技术栈开发自己的业务系统后管接口和页面。
 
 ### 启动系统
