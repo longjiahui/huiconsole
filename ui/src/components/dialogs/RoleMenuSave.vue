@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import { ref, computed } from 'vue'
 import utils from '@/scripts/utils'
 

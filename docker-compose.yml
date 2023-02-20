@@ -11,6 +11,8 @@ services:
   ui:
     build:
       context: ./ui
+    volumes:
+      - ./huiconsole.config.json:/var/www/html/huiconsole.config.json
   server:
     build:
       context: ./server
@@ -18,7 +20,7 @@ services:
       - mongo
     volumes:
       - ./run/logs:/app/logs/huiconsole-prod
-      - ./huiconsole.config.js:/app/huiconsole.config.js
+      - ./huiconsole.config.json:/app/huiconsole.config.json
 
   mongo:
     image: mongo:6.0.3

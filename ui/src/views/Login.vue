@@ -3,8 +3,8 @@
     <transition mode="out-in" name="anfo-fade">
         <div v-if="isAdminRegistered" class="card">
             <div class="block-header p-h-l p-v-l p-b-m v-s">
-                <div class="title" style="font-size: 1.5em">HUI CONSOLE</div>
-                <div class="desc">后台管理系统</div>
+                <div class="title" style="font-size: 1.5em">{{ $getters.huiconsole.brand }}</div>
+                <div class="desc">{{ $getters.huiconsole.description }}</div>
             </div>
             <div class="block-content v v-m p-h-l p-v-m">
                 <a-input class="draw-style" v-focus placeholder="用户名"
@@ -52,7 +52,7 @@
 import { ref } from 'vue'
 import md5 from 'md5'
 
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import { mutations } from '@/store'
 
 

@@ -6,10 +6,13 @@ dayjs.locale('zh-cn')
 dayjs.extend(relativeTime)
 dayjs.extend(isLeapYear)
 
-import { utils } from '@anfo/ui'
+import { utils as anfoUtils } from '@anfo/ui'
 
-export default {
-    ...utils,
+import router from '@/router'
+// import { useRoute, useRouter } from 'vue-router'
+
+let utils = {
+    ...anfoUtils,
     dayjs,
 
     getElementAttrRelatedToRoot(el, key){
@@ -135,5 +138,27 @@ export default {
             ret = n <= max
         }
         return ret
+    },
+
+    goTheme: (data = '', type='push')=>{
+        let theme = utils.getLocal('theme', 'default')
+        router[type]({
+            name: theme,
+            params: {
+                base64Params: data,
+            }
+        })
+    },
+    switchTheme(theme, type = 'replace'){
+        let route = router.currentRoute
+        utils.setLocal('theme', theme)
+        router[type]({
+            name: theme,
+            params: {
+                ...route.params,
+            },
+        })
     }
 }
+
+export default utils

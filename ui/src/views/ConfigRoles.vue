@@ -70,7 +70,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import dialog from '@/scripts/dialog'
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { debounce } from 'throttle-debounce'

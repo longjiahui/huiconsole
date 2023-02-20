@@ -19,7 +19,7 @@
                 <div class="sidebar shrink-0">
                     <div class="title">
                         <div class="brand h justify-space-between p-h-m">
-                            <div>HUI CONSOLE</div>
+                            <div>{{ $getters.huiconsole.brand }}</div>
                             <a-dropdown>
                                 <div class="clickable">
                                     <SettingOutlined />
@@ -40,7 +40,7 @@
                                                 <div>退出登录</div>
                                             </div>
                                         </a-menu-item>
-                                        <a-menu-item @click="$router.replace({name: $const.routes.default, params: {...$route.params}})">
+                                        <a-menu-item @click="$utils.switchTheme($const.routes.default)">
                                             <div class="h h-xs">
                                                 <BgColorsOutlined />
                                                 <div>切换默认主题</div>

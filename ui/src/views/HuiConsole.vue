@@ -16,7 +16,7 @@ import shortid from 'shortid'
 import utils from '@/scripts/utils'
 import business from '@/scripts/business'
 import routeUtils from '@/scripts/route'
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import $const from '@/const'
 import { MessageTransporter } from '@anfo/huiconsole-web-sdk'
 

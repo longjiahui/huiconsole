@@ -35,7 +35,7 @@
 
 <script setup>
 import { ref, watch, computed } from 'vue'
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import utils from '@/scripts/utils'
 import dialog from '@/scripts/dialog'
 import { DeleteOutlined, FolderOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons-vue'

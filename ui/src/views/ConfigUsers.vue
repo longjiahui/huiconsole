@@ -65,7 +65,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import dialog from '@/scripts/dialog'
 import { getters } from '@/store'
 import { SearchOutlined } from '@ant-design/icons-vue';

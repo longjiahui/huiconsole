@@ -30,7 +30,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import { useList } from '@anfo/ui'
 import { UserOutlined } from '@ant-design/icons-vue';
 

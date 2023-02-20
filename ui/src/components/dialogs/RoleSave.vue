@@ -42,7 +42,7 @@
 <script setup>
 import { computed } from 'vue'
 import utils from '@/scripts/utils'
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import dialog from '@/scripts/dialog'
 
 import extend from 'extend'

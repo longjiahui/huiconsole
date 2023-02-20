@@ -26,7 +26,7 @@ export default {
         app.config.globalProperties.$const = $const
         app.config.globalProperties.$utils = utils
 
-        // 当前的用法，直接在Template的dom元素属性上使用需要加上.value,有点不统一，所以使用方法统一在页面引入getters，将变量放在公共scope上
+        // computed元素套在reactiv中就可以省略.value
         app.config.globalProperties.$getters = getters
     }
 }

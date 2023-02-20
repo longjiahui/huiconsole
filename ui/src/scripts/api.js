@@ -9,7 +9,7 @@ import axios from './axios'
 */
 let createAPI = options=>{
     let {
-        route = '/api',
+        route = './api',
         raw = false,
         dataMapper = d=>d,
         method = 'post'
@@ -38,4 +38,8 @@ let createAPI = options=>{
     })
 }
 
-export default createAPI()
+export const api = createAPI()
+export const fileAPI = createAPI({
+    route: './',
+    method: 'get',
+})

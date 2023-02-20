@@ -1,7 +1,10 @@
 export default {
     routes: {
         login: 'login',
-        default: 'default'
+
+        // layout themes
+        default: 'default',
+        legacy: 'legacy',
     },
 
     menuType: {

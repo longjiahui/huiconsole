@@ -20,7 +20,7 @@
                 <div class="sidebar v-m shrink-0">
                     <div class="title h justify-flex-end">
                         <div class="card brand h h-s p-h-m" style="border-radius: 5px">
-                            <div>HUI CONSOLE</div>
+                            <div>{{ $getters.huiconsole.brand }}</div>
                             <a-dropdown>
                                 <div class="clickable">
                                     <SettingOutlined />
@@ -41,7 +41,7 @@
                                                 <div>退出登录</div>
                                             </div>
                                         </a-menu-item>
-                                        <a-menu-item @click="$router.replace({name: 'legacy', params: {...$route.params}})">
+                                        <a-menu-item @click="$utils.switchTheme($const.routes.legacy)">
                                             <div class="h h-xs">
                                                 <BgColorsOutlined />
                                                 <div>切换Legacy主题</div>

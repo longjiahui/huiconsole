@@ -29,7 +29,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import utils from '@/scripts/utils'
-import api from '@/scripts/api'
+import { api } from '@/scripts/api'
 import dialog from '@/scripts/dialog'
 import { getters } from '@/store'
 
