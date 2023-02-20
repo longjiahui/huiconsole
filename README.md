@@ -12,16 +12,20 @@
 
 为了系统的安全，需要在配置文件中指定新的JWT密钥以及cookie加密密钥。
 
-`huiconsole.config.js`
+`huiconsole.config.json`
 
-```js
-module.exports = {
-    server: {
-        keys: 'huiconsole-cookie-key',
-        jwtSecret: {
-            user: 'huiconsole-jwtsecret',
-            passwordChanging: 'huiconsole-jwtsecret2',
+```json
+{
+    "server": {
+        "keys": "huiconsole-cookie-key",
+        "jwtSecret": {
+            "user": "huiconsole-jwtsecret",
+            "passwordChanging": "huiconsole-jwtsecret2"
         }
+    }, 
+    "ui": {
+        "title": "HUI CONSOLE",
+        "description": "后台管理系统"
     }
 }
 ```
