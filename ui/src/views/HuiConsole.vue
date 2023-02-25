@@ -105,7 +105,7 @@ function touchTab(tab){
 
 
 function buildComponentFromTab(tab){
-    let { data, isTransparent } = tab.menu
+    let { data } = tab.menu || {}
     let c
     if(tab.type === $const.menuType.iframe){
         c = defineComponent({
