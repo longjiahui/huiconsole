@@ -104,17 +104,15 @@
             </template>
             <template #tabs="{ tabs, currentTabID, setContext}">
                 <div class="main-tabs card h h-s p-s align-stretch">
-                        <div class="h h-s" v-if="tabs.length !== 1">
+                    <transition name="anfo-fade" mode="out-in">
+                        <div class="f-1 h h-s" v-if="tabs.length > 0">
                             <transition name="anfo-fade" mode="out-in">
                                 <div v-if="tabs.length > 1">
                                     <a-tooltip placement="left" title="清除全部标签">
                                         <DeleteOutlined class="clickable" @click="setContext({tabs: []})" />
                                     </a-tooltip>
                                 </div>
-                                <div v-else-if="!tabs?.length > 0" class="p-h-s">没有打开的标签页</div>
                             </transition>
-                        </div>
-                        <div class="f-1">
                             <anfo-orderable-container channel="tabs" :datas="tabs"
                                 @update:datas="val=>{
                                     val.forEach(i=>i.component = tabs.find(t=>t.id === i.id)?.component)
@@ -130,12 +128,16 @@
                                         <div class="f-1" style="word-break: break-all;">
                                             {{ t.menu?.name }}
                                         </div>
-                                        <div class="tab-delete" @click.stop="tabs.splice(i, 1)"><CloseOutlined/></div>
+                                        <div class="tab-delete" @click.stop="handleDeleteTab(tabs, i, setContext)"><CloseOutlined/></div>
                                     </div>
                                 </template>
                             </anfo-orderable-container>
                         </div>
-                    </div>
+                        <div v-else class="h h-s">
+                            <div class="p-h-s">没有打开的标签页</div>
+                        </div>
+                    </transition>
+                </div>
             </template>
             <template #content="{ currentTab, iframeTabs, componentTabs, currentTabID, menus }">
                 <div class="main-pages f-1">
@@ -150,23 +152,18 @@
                             v-show="currentTabID === t.id" :class="['size-full overflow-hidden', t?.menu?.isTransparent ? '':'card']">
                             <component :is="t.component"></component>
                         </div>
-                        <!-- <transition name="anfo-fade" appear>
-                            <div v-if="!currentTab"
-                                style="background: linear-gradient(45deg, whitesmoke, darken(whitesmoke, 5%))!important;"
-                                class="card size-full v v-m align-center justify-center">
-                                <h1 class="title">HUI CONSOLE</h1>
-                                <p class="desc">longjiahui@hotmail.com</p>
-                                <div>欢迎使用 <span class="title">HUI CONSOLE</span></div>
-                                <div @click="openTab(configMenusMenuItem)" class="clickable" v-if="!(menus?.length > 0)">
-                                    还没有菜单数据，点击创建
-                                </div>
-                            </div>
-                        </transition> -->
                     </div>
             </template>
         </hui-console>
     </div>
 </template>
+
+<script setup>
+function handleDeleteTab(tabs, i, setContext){
+    tabs.splice(i, 1)
+    setContext({tabs})
+}
+</script>
 
 <style lang="scss" scoped>
 $navHeight: 48px;

@@ -95,37 +95,39 @@
             </template>
             <template #tabs="{ tabs, currentTabID, setContext }">
                 <div class="main-tabs h h-s align-stretch">
-                    <div class="h h-s p-l-s" v-if="tabs?.length !== 1">
-                        <transition name="anfo-fade" mode="out-in">
-                            <div v-if="tabs?.length > 1">
-                                <a-tooltip placement="left" title="清除全部标签">
-                                    <DeleteOutlined class="clickable" @click="setContext({tabs: []})" />
-                                </a-tooltip>
-                            </div>
-                            <div v-else-if="!tabs?.length > 0" class="p-h-s">没有打开的标签页</div>
-                        </transition>
-                    </div>
-                    <div class="f-1">
-                        <anfo-orderable-container channel="tabs" :datas="tabs"
-                            @update:datas="val=>{
-                                val.forEach(i=>i.component = tabs.find(t=>t.id === i.id)?.component)
-                                tabs = val
-                            }"
-                            :data-key="d=>d.id" isHorizontal>
-                            <template #="{ data: t, i }">
-                                <div @click="setContext({currentTabID: t.id})"
-                                style="height: 100%"
-                                    :class="['main-tab p-h-m h h-s', t.id === currentTabID ? 'is-current':'']">
-                                    <!-- {{ t.id }} -->
-                                    <div v-if="t.menu?.icon"><component :is="t.menu?.icon"></component></div>
-                                    <div class="f-1" style="word-break: break-all;">
-                                        {{ t.menu?.name }}
-                                    </div>
-                                    <div class="tab-delete" @click.stop="tabs.splice(i, 1)"><CloseOutlined/></div>
+                    <transition name="anfo-fade" mode="out-in">
+                        <div class="f-1 h" v-if="tabs.length > 0">
+                            <transition name="anfo-fade" mode="out-in">
+                                <div class="p-h-s" v-if="tabs.length > 1">
+                                    <a-tooltip placement="left" title="清除全部标签">
+                                        <DeleteOutlined class="clickable" @click="setContext({tabs: []})" />
+                                    </a-tooltip>
                                 </div>
-                            </template>
-                        </anfo-orderable-container>
-                    </div>
+                            </transition>
+                            <anfo-orderable-container channel="tabs" :datas="tabs"
+                                @update:datas="val=>{
+                                    val.forEach(i=>i.component = tabs.find(t=>t.id === i.id)?.component)
+                                    tabs = val
+                                }"
+                                :data-key="d=>d.id" isHorizontal>
+                                <template #="{ data: t, i }">
+                                    <div @click="setContext({currentTabID: t.id})"
+                                    style="height: 100%"
+                                        :class="['main-tab p-h-s h h-s', t.id === currentTabID ? 'is-current':'']">
+                                        <!-- {{ t.id }} -->
+                                        <div v-if="t.menu?.icon"><component :is="t.menu?.icon"></component></div>
+                                        <div class="f-1" style="word-break: break-all;">
+                                            {{ t.menu?.name }}
+                                        </div>
+                                        <div class="tab-delete" @click.stop="handleDeleteTab(tabs, i, setContext)"><CloseOutlined/></div>
+                                    </div>
+                                </template>
+                            </anfo-orderable-container>
+                        </div>
+                        <div v-else class="h h-s">
+                            <div class="p-h-s">没有打开的标签页</div>
+                        </div>
+                    </transition>
                 </div>
             </template>
             <template #content="{ currentTab, iframeTabs, componentTabs, currentTabID, menus }">
@@ -157,6 +159,13 @@
         </hui-console>
     </div>
 </template>
+
+<script setup>
+function handleDeleteTab(tabs, i, setContext){
+    tabs.splice(i, 1)
+    setContext({tabs})
+}
+</script>
 
 <style lang="scss" scoped>
 $primaryColor: #2d60b1;

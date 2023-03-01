@@ -10,3 +10,11 @@ import plugins from '@/scripts/plugins'
 app.use(plugins)
 
 app.mount('#app')
+
+import { fileAPI } from '@/scripts/api'
+import { mutations } from '@/store'
+
+// fetch huiconsoleConfig
+fileAPI['huiconsole.config.json']().then(data=>{
+    mutations.setHuiConsoleConfig(data)  
+})

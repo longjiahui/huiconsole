@@ -43,11 +43,6 @@ export const mutations = {
     }
 }
 
-// fetch huiconsoleConfig
-fileAPI['huiconsole.config.json']().then(data=>{
-    mutations.setHuiConsoleConfig(data)  
-})
-
 export const getters = reactive({
     isLoading: computed(()=>state.loadingCounter > 0),
     myInfo: utils.createAsyncComputed(()=>state.token, async ()=>{
