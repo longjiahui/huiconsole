@@ -4,6 +4,7 @@
 
 import 'egg';
 import ExportAdmin = require('../../../app/controller/admin');
+import ExportAsset = require('../../../app/controller/asset');
 import ExportMenu = require('../../../app/controller/menu');
 import ExportRole = require('../../../app/controller/role');
 import ExportUser = require('../../../app/controller/user');
@@ -11,6 +12,7 @@ import ExportUser = require('../../../app/controller/user');
 declare module 'egg' {
   interface IController {
     admin: ExportAdmin;
+    asset: ExportAsset;
     menu: ExportMenu;
     role: ExportRole;
     user: ExportUser;

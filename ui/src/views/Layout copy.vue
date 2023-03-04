@@ -40,7 +40,7 @@
                                 :datas="menus"
                                 :data-key="d=>d._id"
                                 container-class="p-l-m"
-                                children-key="subMenus">
+                                children-key="children">
                                 <template #="{ item: m, i, hasChildren, prevHasChildren, datas, toggle, isFold, isLast, isFirst }">
                                     <div
                                         :class="[
@@ -187,8 +187,8 @@ let menus = ref([])
 // 初始化标志
 let isInited = ref(false)
 Promise.all([
-    api.menu.pageData().then(data=>{
-        menus.value = data.data
+    api.menu.all().then(data=>{
+        menus.value = data
     })
 ]).finally(()=>{
     isInited.value = true

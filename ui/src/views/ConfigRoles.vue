@@ -6,63 +6,49 @@
             </a-input>
             <button class="shrink-0 button primary" @click="handleNewRole">新建角色</button>
         </div>
+        <div class="card p-m">
+            <Pagination></Pagination>
+        </div>
         <div class="card">
-            <a-table
-                class="p-m"
-                bordered
-                @change="handleLoadData"
-                size="small"
-                :loading="isLoading"
-                :data-source="roles"
-                :pagination="{
-                    total,
-                    pageSize
-                }"
-                row-class-name="clickable"
-                :columns="[{
-                    title: '角色名',
-                    dataIndex: 'name',
-                }, {
-                    title: 'key',
-                    dataIndex: 'key',
-                }, {
-                    title: '管理员',
-                    key: 'isAdmin',
-                }, {
-                    title: '操作',
-                    key: 'operation',
-                    width: '88px',
-                }, ]"
-                :custom-row="(...rest)=>({
-                    onClick: ()=>handleEditRole(...rest)
-                })"
-                row-key="_id">
-                <template #bodyCell="{ column, record, index, text }">
-                    <div v-if="column.key === 'isAdmin'">
-                        <div>{{ record.isAdmin ? '是' : '否' }}</div>
-                    </div>
-                    <div v-if="column.key === 'operation'" @click.stop>
-                        <div class="h h-s justify-flex-end">
-                            <a-tooltip title="快速查看/修改用户角色">
-                                <button @click="$dialog.openQuickCheckUsersRoleDialog({ role: record._id }).then(()=>refreshDatas())" class="button">
-                                    <div class="h h-xxs">
-                                        <UserOutlined />
-                                        <div>{{ record.userAmount }}</div>
+            <div class="vbox-0">
+                <div class="cf-2 ctitle hbox-0 align-stretch cp-h-m cp-v-m c0f-1" style="background: whitesmoke">
+                    <div>角色名</div>
+                    <div>KEY</div>
+                    <div>管理员</div>
+                    <div>操作</div>
+                </div>
+                <List #="{ data }">
+                    <div class="vbox-0">
+                        <div v-for="(item, i) in data">
+                            <div class="clickable cv cjustify-center c0align-flex-start c0f-1 cf-2 hbox-0 align-stretch cp-s cp-h-m" @click="handleEditRole(item, i)">
+                                <div>{{ item.name }}</div>
+                                <div>{{ item.key }}</div>
+                                <div>{{ item.isAdmin }}</div>
+                                <div @click.stop>
+                                    <div class="h h-s">
+                                        <a-tooltip title="快速查看/修改用户角色">
+                                            <button @click="$dialog.openQuickCheckUsersRoleDialog({ role: item._id }).then(()=>context.refresh())" class="button">
+                                                <div class="h h-xxs">
+                                                    <UserOutlined />
+                                                    <div>{{ item.userAmount }}</div>
+                                                </div>
+                                            </button>
+                                        </a-tooltip>
+                                        <a-popconfirm
+                                            v-if="$getters.myID !== item._id"
+                                            title="确定删除吗？"
+                                            @confirm="handleDelete(item, i)">
+                                            <button class="button error">
+                                                <DeleteOutlined />
+                                            </button>
+                                        </a-popconfirm>
                                     </div>
-                                </button>
-                            </a-tooltip>
-                            <a-popconfirm
-                                v-if="$getters.myRoleID !== record._id"
-                                title="确定删除吗？"
-                                @confirm="handleDelete(record, index)">
-                                <button class="button error">
-                                    <DeleteOutlined />
-                                </button>
-                            </a-popconfirm>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </template>
-            </a-table>
+                </List>
+            </div>
         </div>
     </div>
 </template>
@@ -75,38 +61,21 @@ import dialog from '@/scripts/dialog'
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { debounce } from 'throttle-debounce'
 
-let isLoading = ref(false)
-let roles = ref([])
-let page = ref(1)
-let pageSize = ref(20)
-let total = ref(0)
+import { usePagination } from '@anfo/ui'
+
 let keyword = ref('')
 
-watch(keyword, debounce(500, refreshDatas))
-
-function handleLoadData({ current, pageSize }, ){
-    page.value = current
-    pageSize.value = pageSize
-    refreshDatas()
-}
-
-function refreshDatas(){
-    isLoading.value = true
-    api.role.pageData({
-        page: page.value,
-        pageSize: pageSize.value,
+let { List, Pagination, context } = usePagination(api.role.pageData, {
+    params: ()=>({
         keyword: keyword.value,
-    }).then(({data: roleDatas, total: datasTotal})=>{
-        roles.value = roleDatas
-        total.value = datasTotal
-    }).finally(()=>isLoading.value = false)
-}
+    })
+})
 
-refreshDatas()
+watch(keyword, debounce(500, ()=>context.refresh()))
 
 function handleNewRole(){
     dialog.openRoleSaveDialog().then(data=>{
-        refreshDatas()
+        return context.refresh()
     })
 }
 function handleEditRole(role, i){
@@ -116,7 +85,7 @@ function handleEditRole(role, i){
 }
 function handleDelete(role, i){
     api.role.delete({_id: role._id}).then(()=>{
-        roles.value.splice(i, 1)
+        return context.refresh()
     })
 }
 </script>

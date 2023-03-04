@@ -29,7 +29,7 @@ module.exports = app=>{
     router.post('/api/user/delete', jwtAdminRoleCheck, controller.user.delete)
     router.post('/api/user/changePassword', jwtAdminRoleCheck, controller.user.changePassword)
 
-    router.post('/api/menu/pageData', jwt, controller.menu.pageData)
+    router.post('/api/menu/all', jwt, controller.menu.all)
     router.post('/api/menu/save', jwtAdminRoleCheck, controller.menu.save)
     router.post('/api/menu/delete', jwtAdminRoleCheck, controller.menu.delete)
     router.post('/api/menu/resetOrders', jwtAdminRoleCheck, controller.menu.resetOrders)
@@ -38,6 +38,10 @@ module.exports = app=>{
     router.post('/api/role/pageData', jwt, controller.role.pageData)
     router.post('/api/role/save', jwtAdminRoleCheck, controller.role.save)
     router.post('/api/role/delete', jwtAdminRoleCheck, controller.role.delete)
+
+    router.post('/api/asset/save', jwtAdminRoleCheck, controller.asset.save)
+    router.post('/api/asset/delete', jwtAdminRoleCheck, controller.asset.delete)
+    router.post('/api/asset/pageData', jwtAdminRoleCheck, controller.asset.pageData)
 
     router.post('/api/admin/save', jwtAdminRoleCheck, controller.admin.save)
     router.post('/api/admin/get', jwtAdminRoleCheck, controller.admin.get)

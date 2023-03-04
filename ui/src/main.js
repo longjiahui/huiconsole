@@ -1,7 +1,11 @@
+import * as Vue from 'vue'
 import { createApp } from 'vue'
+window.Vue = Vue
+
 import App from './App.vue'
 
 let app = createApp(App)
+window.app = app
 
 import router from '@/router'
 app.use(router)

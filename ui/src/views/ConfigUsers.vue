@@ -6,58 +6,39 @@
         </a-input>
         <button class="shrink-0 button primary" @click="handleNewUser">新建用户</button>
     </div>
+    <div class="card p-m">
+        <Pagination></Pagination>
+    </div>
     <div class="card">
-        <a-table
-            class="p-m"
-            bordered
-            @change="handleLoadData"
-            size="small"
-            :loading="isLoading"
-            :data-source="users"
-            :pagination="{
-                total,
-                pageSize
-            }"
-            row-class-name="clickable"
-            :columns="[{
-                title: '登录用户名',
-                dataIndex: 'username',
-            }, {
-                title: '昵称',
-                dataIndex: 'name',
-            }, {
-                title: '角色',
-                dataIndex: ['role', 'name'],
-            }, {
-                title: '操作',
-                key: 'operation',
-                width: '72px',
-            }, ]"
-            :custom-row="(...rest)=>({
-                onClick: ()=>handleEditUser(...rest)
-            })"
-            row-key="_id">
-            <template #bodyCell="{ column, record, index, text }">
-                <div v-if="column.key === 'operation'" class="h justify-center" @click.stop>
-                    <a-popconfirm
-                        v-if="$getters.myID !== record._id"
-                        title="确定删除吗？"
-                        @confirm="handleDelete(record, index)">
-                        <button class="button error">
-                            <DeleteOutlined />
-                        </button>
-                    </a-popconfirm>
+        <div class="vbox-0">
+            <div class="cf-2 ctitle hbox-0 align-stretch cp-h-m cp-v-m c0f-1" style="background: whitesmoke">
+                <div>登陆用户名</div>
+                <div>昵称</div>
+                <div>角色</div>
+                <div>操作</div>
+            </div>
+            <List #="{ data }">
+                <div class="vbox-0">
+                    <div v-for="(item, i) in data">
+                        <div class="clickable cv cjustify-center c0align-flex-start cf-2 hbox-0 align-stretch cp-s cp-h-m c0f-1" @click="handleEditUser(item, i)">
+                            <div>{{ item.username }}</div>
+                            <div>{{ item.name }}</div>
+                            <div>{{ item.role?.name }}</div>
+                            <div @click.stop>
+                                <a-popconfirm
+                                    v-if="$getters.myID !== item._id"
+                                    title="确定删除吗？"
+                                    @confirm="handleDelete(item, i)">
+                                    <button class="button error">
+                                        <DeleteOutlined />
+                                    </button>
+                                </a-popconfirm>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </template>
-        </a-table>
-        <!-- <anfo-list-pagination :context="context" container-class="vbox-s">
-            <template #="{ item, i }">
-                <div class="h h-s clickable" @click="handleEditUser(item, i)">
-                    <div>{{ item.username }}</div>
-                    <div>{{ item.nickname }}</div>
-                </div>
-            </template>
-        </anfo-list-pagination> -->
+            </List>
+        </div>
     </div>
 </div>
 </template>
@@ -67,42 +48,25 @@ import { ref, watch } from 'vue'
 
 import { api } from '@/scripts/api'
 import dialog from '@/scripts/dialog'
-import { getters } from '@/store'
 import { SearchOutlined } from '@ant-design/icons-vue';
 import { debounce } from 'throttle-debounce'
 
-let isLoading = ref(false)
-let users = ref([])
-let page = ref(1)
-let pageSize = ref(20)
-let total = ref(0)
+import { usePagination } from '@anfo/ui'
+
 let keyword = ref('')
 
-watch(keyword, debounce(500, refreshDatas))
+let { List, Pagination, context } = usePagination(api.user.pageData, {
+    params: ()=>({
+        keyword: keyword.value
+    })
+})
 
-function handleLoadData({ current, pageSize }, ){
-    page.value = current
-    pageSize.value = pageSize
-    refreshDatas()
-}
+watch(keyword, debounce(500, ()=>context.refresh()))
 
-function refreshDatas(){
-    isLoading.value = true
-    api.user.pageData({
-        page: page.value,
-        pageSize: pageSize.value,
-        keyword: keyword.value,
-    }).then(({data: userDatas, total: datasTotal})=>{
-        users.value = userDatas
-        total.value = datasTotal
-    }).finally(()=>isLoading.value = false)
-}
-
-refreshDatas()
 
 function handleNewUser(){
     dialog.openUserSaveDialog().then(data=>{
-        refreshDatas()
+        return context.refresh()
     })
 }
 function handleEditUser(user, i){
@@ -112,7 +76,7 @@ function handleEditUser(user, i){
 }
 function handleDelete(user, i){
     api.user.delete({_id: user._id}).then(()=>{
-        users.value.splice(i, 1)
+        return context.refresh()
     })
 }
 </script>

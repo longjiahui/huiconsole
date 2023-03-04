@@ -6,15 +6,19 @@
             <button class="button">导出</button> -->
         </div>
         <div class="card p-m">
-            <anfo-tree @change="handleChange" :datas="menus" :data-key="d=>d._id" children-key="subMenus">
+            <anfo-tree @change="handleChange" :datas="menus" :data-key="d=>d._id" children-key="children">
                 <template #="{ item, i, datas, hasChildren }">
-                    <div @click="handleEditMenu(item, datas, i)" class="clickable f-1 menu-item h h-xs p-v-s">
+                    <div @click="handleEditMenu(item, datas, i)" class="clickable f-1 menu-item h h-m p-v-s">
                         <template v-if="item">
-                            <div v-if="item.icon">
-                                <component :is="item.icon" />
+                            <div class="v-xs">
+                                <div class="h h-xs">
+                                    <div v-if="item.icon">
+                                        <component :is="item.icon" />
+                                    </div>
+                                    <div class="title">{{ item.name }}</div>
+                                </div>
+                                <div v-if="!hasChildren && item.data?.data" class="desc">{{ item.data?.data }}</div>
                             </div>
-                            <div class="title">{{ item.name }}</div>
-                            <div v-if="!hasChildren" class="desc">{{ item.data }}</div>
                             <div class="h h-xs menu-tools" @click.stop>
                                 <PlusOutlined @click="handleNewSubMenu(item)" class="clickable" />
                                 <!-- <EditOutlined @click="handleEditSubMenu(item, i)" class="clickable" /> -->
@@ -34,16 +38,15 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { ref } from 'vue'
 import { api } from '@/scripts/api'
 import utils from '@/scripts/utils'
 import dialog from '@/scripts/dialog'
-import { DeleteOutlined, FolderOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons-vue'
 
 let menus = ref([])
 
-api.menu.pageData().then(data=>{
-    menus.value = data.data
+api.menu.all().then(data=>{
+    menus.value = data
 })
 
 function handleNewMenu(){
@@ -59,9 +62,9 @@ function handleNewSubMenu(parent){
     dialog.openMenuSaveDialog({
         menu: { parent: parent._id },
     }).then(data=>{
-        parent.subMenus.push(data)
+        parent.children.push(data)
         api.menu.resetOrders({
-            orders: [[data._id, parent.subMenus.length]]
+            orders: [[data._id, parent.children.length]]
         })
     })
 }
@@ -73,7 +76,7 @@ function handleEditMenu(menu, datas, i){
 function handleChange({ treeData, value, dropValue, index, parent } = {}){
     let orders = []
     if(dropValue){
-        dropValue.subMenus.forEach((item, i)=>{
+        dropValue.children.forEach((item, i)=>{
             orders.push([item._id, i])
         })
     }else{
@@ -83,7 +86,7 @@ function handleChange({ treeData, value, dropValue, index, parent } = {}){
         })
     }
     if(parent && parent._id !== dropValue?._id){
-        parent.subMenus.forEach((item, i)=>{
+        parent.children.forEach((item, i)=>{
             orders.push([item._id, i])
         })
     }
@@ -103,7 +106,7 @@ function handleDeleteMenu(menu, datas, i){
     api.menu.delete({
         _id: menu._id,
     }).then(()=>{
-        return utils.iterate(menus.value, 'subMenus', (item, i, datas)=>{
+        return utils.iterate(menus.value, 'children', (item, i, datas)=>{
             if(item._id === menu._id){
                 datas.splice(i, 1)
                 return true

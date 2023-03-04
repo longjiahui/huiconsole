@@ -1,7 +1,7 @@
 <template>
 <a-modal width="400px" title="菜单权限配置" @cancel="emit('reject')" @ok="handleSave">
     <div class="p-l">
-        <anfo-tree v-if="lMenus?.length > 0" :datas="lMenus" #="{ hasChildren, item, datas, i }" data-key="_id" children-key="subMenus">
+        <anfo-tree v-if="lMenus?.length > 0" :datas="lMenus" #="{ hasChildren, item, datas, i }" data-key="_id" children-key="children">
             <div @click="handleCheck(item, !checkDatas[item._id])" class="f-1 h h-s p-v-xs menu-item clickable">
                 <a-checkbox
                     @update:checked="val=>handleCheck(item, val)"
@@ -33,7 +33,7 @@ let props = defineProps({
 let emit = defineEmits(['reject', 'r'])
 
 let lMenus = ref([])
-api.menu.pageData().then(({data: menus, total})=>{
+api.menu.all().then(menus=>{
     lMenus.value = menus
 })
 
@@ -49,10 +49,10 @@ api.menu.pageData().then(({data: menus, total})=>{
 let checkDatas = utils.createAsyncComputed(lMenus, async val=>{
     let menus = lMenus.value
     let datas = {}
-    await utils.iterate(menus, 'subMenus', m=>{
-        if(m.subMenus?.length > 0){
+    await utils.iterate(menus, 'children', m=>{
+        if(m.children?.length > 0){
             datas[m._id] = computed(()=>{
-                return m.subMenus.every(sm=>checkDatas.value[sm._id])
+                return m.children.every(sm=>checkDatas.value[sm._id])
             })
         }else{
             datas[m._id] = props.menus?.includes?.(m._id) || false 
@@ -64,10 +64,10 @@ let checkDatas = utils.createAsyncComputed(lMenus, async val=>{
 let indeterminates = utils.createAsyncComputed(lMenus, async ()=>{
     let menus = lMenus.value
     let datas = {}
-    await utils.iterate(menus, 'subMenus', m=>{
-        if(m.subMenus?.length > 0){
+    await utils.iterate(menus, 'children', m=>{
+        if(m.children?.length > 0){
             datas[m._id] = computed(()=>{
-                return utils.isin(m.subMenus.filter(sm=>!!indeterminates.value[sm._id] || checkDatas.value[sm._id])?.length, `(0, ${m.subMenus.length}]`)
+                return utils.isin(m.children.filter(sm=>!!indeterminates.value[sm._id] || checkDatas.value[sm._id])?.length, `(0, ${m.children.length}]`)
             })
         }
     })
@@ -75,9 +75,9 @@ let indeterminates = utils.createAsyncComputed(lMenus, async ()=>{
 })
 
 async function handleCheck(m, isChecked){
-    if(m.subMenus?.length > 0){
-        await utils.iterate(m.subMenus, 'subMenus', sm=>{
-            if(!(sm.subMenus?.length > 0)){
+    if(m.children?.length > 0){
+        await utils.iterate(m.children, 'children', sm=>{
+            if(!(sm.children?.length > 0)){
                 checkDatas.value[sm._id] = isChecked
             }
         })
@@ -87,7 +87,7 @@ async function handleCheck(m, isChecked){
 }
 
 async function handleSave(){
-    let menuIDs = (await utils.iterateFilter(lMenus.value, 'subMenus', m=>{
+    let menuIDs = (await utils.iterateFilter(lMenus.value, 'children', m=>{
         return !!indeterminates.value[m._id] || !!checkDatas.value[m._id]
     })).map(m=>m._id)
     emit('r', menuIDs)

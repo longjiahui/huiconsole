@@ -2,23 +2,36 @@ const sortPipeline = [{$sort: { order: 1 }}]
 
 module.exports = app => class extends app.Controller{
 
-    async pageData(ctx){
+    // async pageData(ctx){
+    //     let user = ctx.state.user
+    //     let newestUser = await this.service.user.getFullUserByID(user._id)
+    //     let menusFilter = []
+    //     if(!newestUser?.role?.isAdmin){
+    //         menusFilter = [{$match: { _id: {$in: newestUser?.role?.menus || []}}}]
+    //     }
+    //     ctx.body = await this.service.ret.pageDataByAggregate({
+    //         model: ctx.model.Menu,
+    //         pipeline: [{
+    //             $match: {
+    //                 parent: null,
+    //             }
+    //         }, ...menusFilter ],
+    //         sortPipeline: sortPipeline,
+    //         suffixPipeline: [...this.service.menu.createSubMenusLookupOption([...menusFilter, ...sortPipeline])]
+    //     })
+    // }
+    async all(ctx){
         let user = ctx.state.user
         let newestUser = await this.service.user.getFullUserByID(user._id)
-        let menusFilter = []
+        let condition = {}
         if(!newestUser?.role?.isAdmin){
-            menusFilter = [{$match: { _id: {$in: newestUser?.role?.menus || []}}}]
+            condition = { _id: {$in: newestUser?.role?.menus || []}}
         }
-        ctx.body = await this.service.ret.pageDataByAggregate({
-            model: ctx.model.Menu,
-            pipeline: [{
-                $match: {
-                    parent: null,
-                }
-            }, ...menusFilter ],
-            sortPipeline: sortPipeline,
-            suffixPipeline: [...this.service.menu.createSubMenusLookupOption([...menusFilter, ...sortPipeline])]
-        })
+        let menus = (await ctx.model.Menu.find(condition).populate('parent').populate({
+            path: 'data.preloadAssets',
+            model: ctx.model.Asset,
+        })).map(m=>m.toObject())
+        ctx.body = this.service.ret.success(ctx.helper.buildTree(menus))
     }
 
     async save(ctx){
@@ -26,34 +39,20 @@ module.exports = app => class extends app.Controller{
             _id$: 'objectID$',
             name$: 'string',
             icon$: 'string$',
-            data$: 'string$',
+            data$: {
+                data$: 'string$',
+                preloadAssets$: 'array[objectID]$',
+            },
             parent$: 'objectID$',
         })
-
-        let { _id, name, icon, data, parent } = ctx.request.body
-
-        if(!!parent && !await ctx.model.Menu.findById(parent)){
-            throw new app.Error(0, '父菜单不存在')
-        }
-
-        let isEdit = !!_id
-        if(isEdit){
-            let menu = await ctx.model.Menu.findById(_id)
-            if(String(parent || null) !== String(menu.parent || null)){
-                // change parent
-                if(!!menu.parent){
-                    await ctx.model.Menu.updateOne({_id: menu.parent}, {$pull: {subMenus: app.ObjectId(_id)}})
-                }
-            }
-        }
-        let createdMenu = await this.service.basic.save({
-            model: ctx.model.Menu,
-            fields: 'order parent name icon data isTransparent',
+        let data = await ctx.withTransaction(async session=>{
+            return await ctx.model.Menu.saveInTree(ctx.request.body, {
+                fields: 'order parent name icon data isTransparent type',
+                session,
+                // oldData,
+            })
         })
-        if(!!parent){
-            await ctx.model.Menu.updateOne({_id: parent}, {$addToSet: {subMenus: createdMenu._id}})
-        }
-        ctx.body = this.service.ret.success(await this.service.menu.getFullMenuByID(createdMenu._id))
+        ctx.body = this.service.ret.success(await ctx.model.Menu.getDataByID(data._id))
     }
 
     async delete(ctx){

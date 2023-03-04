@@ -1,6 +1,8 @@
 import { createApp, reactive, ref, h, resolveComponent } from "vue"
 
 import MenuSaveDialog from '@/components/dialogs/MenuSave.vue'
+import AssetSaveDialog from '@/components/dialogs/AssetSave.vue'
+import AssetSelectDialog from '@/components/dialogs/AssetSelect.vue'
 import IconPickerDialog from '@/components/dialogs/IconPicker.vue'
 import UserSaveDialog from '@/components/dialogs/UserSave.vue'
 import InputDialog from '@/components/dialogs/Input.vue'
@@ -37,7 +39,7 @@ let dialogs = {
                     DialogComponent
                 },
                 render(){
-                    let dialog = h(DialogComponent, {
+                    let dialog = ()=>h(DialogComponent, {
                         visible: visible.value,
                         'onUpdate:Visible': val=>visible.value = val,
                         ...params,
@@ -71,6 +73,8 @@ let dialogs = {
 
 ;[ 
     ['MenuSaveDialog', MenuSaveDialog],
+    ['AssetSaveDialog', AssetSaveDialog],
+    ['AssetSelectDialog', AssetSelectDialog],
     ['IconPickerDialog', IconPickerDialog],
     ['UserSaveDialog', UserSaveDialog],
     ['InputDialog', InputDialog],

@@ -1,20 +1,16 @@
-// const Validator = require('@anfo/validator')
-// const { ValidateError } = require('../other/customError')
-
 module.exports = {
-    // validate(...rest){
-    //     let model = this.model
-    //     return new Validator({
-    //         objectID(val){
-    //             return val && typeof val === 'string' && val?.length === 24
-    //         },
-    //         modelName(val){
-    //             return Object.keys(model).map(m=>m.toLowerCase()).includes(val.toLowerCase())
-    //         }
-    //     }).validate(this.request.body, ...rest).then(valid=>{
-    //         if(!valid){
-    //             throw new ValidateError()
-    //         }
-    //     })
-    // }
+    async withTransaction(func){
+
+        return func()
+
+        // let session = await this.app.mongoose.startSession()
+        // let ret
+        // await session.withTransaction(async ()=>{
+        //     if(func instanceof Function){
+        //         ret = await func(session)
+        //     }
+        // })
+        // await session.endSession()
+        // return ret
+    }
 }

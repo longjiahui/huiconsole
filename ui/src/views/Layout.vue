@@ -2,21 +2,21 @@
 <template>
     <div class="size-full">
         <hui-console>
-            <template #layout="context">
-                <div v-loading="!context.isInited" class="size-full">
+            <template #layout="data">
+                <div v-loading="!data.context.isInited" class="size-full">
                     <div class="page-layout size-full v v-m p-m">
-                        <div v-show="context.isInited" class="f-1 shrink-0 h align-stretch h-m">
+                        <div v-show="data.context.isInited" class="f-1 shrink-0 h align-stretch h-m">
                             <!-- sidebar -->
-                            <component :is="context.Sidebar" v-bind="context"></component>
+                            <component :is="data.Sidebar" v-bind="data.context"></component>
                             <div class="main-main f-1 v v-m">
-                                <component :is="context.Tabs" v-bind="context"></component>
-                                <component :is="context.Content" v-bind="context"></component>
+                                <component :is="data.Tabs" v-bind="data.context"></component>
+                                <component :is="data.Content" v-bind="data.context"></component>
                             </div>
                         </div>
                     </div>
                 </div>
             </template>
-            <template #sidebar="{ openTab, isInited, menus, currentTab, configRolesMenusItem, configMenusMenuItem, configUsersMenusItem, setContext, }">
+            <template #sidebar="context">
                 <div class="sidebar v-m shrink-0">
                     <div class="title h justify-flex-end">
                         <div class="card brand h h-s p-h-m" style="border-radius: 5px">
@@ -28,7 +28,7 @@
                                 <template #overlay>
                                     <a-menu>
                                         <template v-if="$getters.isImAdmin">
-                                            <a-menu-item @click="openTab(m)" v-for="m in [configRolesMenusItem, configUsersMenusItem, configMenusMenuItem]">
+                                            <a-menu-item @click="context.openTab(m)" v-for="m in [context.configRolesMenusItem, context.configUsersMenusItem, context.configMenusMenuItem, context.configAssetsMenuItem]">
                                                 <div class="h h-xs">
                                                     <component :is="m.dropDownIcon"></component>
                                                     <div>{{ m.name }}</div>
@@ -52,20 +52,20 @@
                             </a-dropdown>
                         </div>
                     </div>
-                    <div v-if="isInited">
+                    <div v-if="context.isInited">
                         <transition name="anfo-fade-tr" appear mode="out-in">
                             <anfo-loop
-                                v-if="menus?.length > 0"
+                                v-if="context.menus?.length > 0"
                                 style="border-radius: 5px;padding-left: 0"
-                                :datas="menus"
+                                :datas="context.menus"
                                 data-key="_id"
                                 container-class="p-l-m"
-                                children-key="subMenus">
+                                children-key="children">
                                 <template #="{ item: m, i, hasChildren, prevHasChildren, datas, toggle, isFold, isLast, isFirst }">
                                     <div
                                         :class="[
                                             'f-1 menu-item h h-s',
-                                            m._id === currentTab?.menu?._id ? 'is-current':'',
+                                            m._id === context.currentTab?.menu?._id ? 'is-current':'',
                                             hasChildren ? 'has-children':'',
 
                                             // 左上角圆角情况
@@ -75,7 +75,7 @@
                                             isLast ? 'has-bottom-right-radius':'',
                                             isFirst ? 'has-top-right-radius has-top-left-radius':'',
                                         ]"
-                                        @click="hasChildren ? toggle() : openTab(m)">
+                                        @click="hasChildren ? toggle() : context.openTab(m)">
                                         <div class="h h-s f-1 justify-flex-end">
                                             <div v-if="m.icon">
                                                 <component :is="m.icon" />
@@ -102,33 +102,33 @@
                     </div>
                 </div>
             </template>
-            <template #tabs="{ tabs, currentTabID, setContext}">
+            <template #tabs="context">
                 <div class="main-tabs card h h-s p-s align-stretch">
                     <transition name="anfo-fade" mode="out-in">
-                        <div class="f-1 h h-s" v-if="tabs.length > 0">
+                        <div class="f-1 h h-s" v-if="context.tabs.length > 0">
                             <transition name="anfo-fade" mode="out-in">
-                                <div v-if="tabs.length > 1">
+                                <div v-if="context.tabs.length > 1">
                                     <a-tooltip placement="left" title="清除全部标签">
-                                        <DeleteOutlined class="clickable" @click="setContext({tabs: []})" />
+                                        <DeleteOutlined class="clickable" @click="context.setContext({tabs: []})" />
                                     </a-tooltip>
                                 </div>
                             </transition>
-                            <anfo-orderable-container channel="tabs" :datas="tabs"
+                            <anfo-orderable-container channel="tabs" :datas="context.tabs"
                                 @update:datas="val=>{
-                                    val.forEach(i=>i.component = tabs.find(t=>t.id === i.id)?.component)
-                                    tabs = val
+                                    val.forEach(i=>i.component = context.tabs.find(t=>t.id === i.id)?.component)
+                                    context.tabs = val
                                 }"
                                 :data-key="d=>d.id" isHorizontal class="h-s">
                                 <template #="{ data: t, i }">
-                                    <div @click="setContext({currentTabID: t.id})"
+                                    <div @click="context.setContext({currentTabID: t.id})"
                                     style="height: 100%"
-                                        :class="['main-tab p-h-s h h-s', t.id === currentTabID ? 'is-current':'']">
+                                        :class="['main-tab p-h-s h h-s', t.id === context.currentTabID ? 'is-current':'']">
                                         <!-- {{ t.id }} -->
                                         <div v-if="t.menu?.icon"><component :is="t.menu?.icon"></component></div>
                                         <div class="f-1" style="word-break: break-all;">
                                             {{ t.menu?.name }}
                                         </div>
-                                        <div class="tab-delete" @click.stop="handleDeleteTab(tabs, i, setContext)"><CloseOutlined/></div>
+                                        <div class="tab-delete" @click.stop="context.tabs.splice(i, 1)"><CloseOutlined/></div>
                                     </div>
                                 </template>
                             </anfo-orderable-container>
@@ -139,30 +139,26 @@
                     </transition>
                 </div>
             </template>
-            <template #content="{ currentTab, iframeTabs, componentTabs, currentTabID, menus }">
+            <template #content="context">
                 <div class="main-pages f-1">
-                        <template v-if="currentTab">
-                            <div class="size-full" v-if="currentTab.type === $const.menuType.component">
-                                <keep-alive :include="componentTabs.map(t=>t.id)">
-                                    <component :is="currentTab?.component"></component>
-                                </keep-alive>
-                            </div>
-                        </template>
-                        <div v-for="t in iframeTabs" :key="t.id"
-                            v-show="currentTabID === t.id" :class="['size-full overflow-hidden', t?.menu?.isTransparent ? '':'card']">
-                            <component :is="t.component"></component>
+                    <template v-if="context.currentTab">
+                        <div class="size-full" v-if="context.currentTab.menu?.type === $const.MT.COMPONENT">
+                            <keep-alive :include="context.componentTabs.map(t=>t.id)">
+                                <component :is="context.currentTab?.component"></component>
+                            </keep-alive>
                         </div>
+                    </template>
+                    <div v-for="t in context.iframeTabs" :key="t.id"
+                        v-show="context.currentTabID === t.id" :class="['size-full overflow-hidden', t?.menu?.isTransparent ? '':'card']">
+                        <component :is="t.component"></component>
                     </div>
+                </div>
             </template>
         </hui-console>
     </div>
 </template>
 
 <script setup>
-function handleDeleteTab(tabs, i, setContext){
-    tabs.splice(i, 1)
-    setContext({tabs})
-}
 </script>
 
 <style lang="scss" scoped>
@@ -191,7 +187,7 @@ $navHeight: 48px;
 .main-tab{
     min-width: 72px;
     border-radius: 3px;
-    transition: color .3s;
+    // transition: color .3s;
     background: linear-gradient(45deg, lighten($primaryColor, 15%), lighten($primaryColor, 10%));
     color: $primaryTextColor;
     position: relative;

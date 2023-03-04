@@ -1,11 +1,14 @@
 import $const from '@/const'
 
 export default {
+    isURL(data){
+        return /^http(s)?:\/\/.*/.test(data)
+    },
     getMenuType(menu){
-        if(/^https?:\/\/.+/.test(menu?.data)){
-            return $const.menuType.iframe
+        if(/^https?:\/\/.+/.test(menu?.data?.data)){
+            return $const.MT.IFRAME
         }else{
-            return $const.menuType.component
+            return $const.MT.COMPONENT
         }
     }
 }

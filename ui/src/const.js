@@ -7,8 +7,14 @@ export default {
         legacy: 'legacy',
     },
 
-    menuType: {
-        iframe: 'iframe',
-        component: 'component',
+    //menutype
+    MT: {
+        IFRAME: 'iframe',
+        COMPONENT: 'component',
+    },
+
+    ASSET: {
+        STYLE: 'style',
+        SCRIPT: 'script',
     },
 }

@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </template>
-            <template #sidebar="{ openTab, isInited, menus, currentTab, configRolesMenusItem, configMenusMenuItem, configUsersMenusItem, setContext, }">
+            <template #sidebar="{ openTab, isInited, menus, currentTab, configRolesMenusItem, configMenusMenuItem, configAssetsMenuItem, configUsersMenusItem, setContext, }">
                 <div class="sidebar shrink-0">
                     <div class="title">
                         <div class="brand h justify-space-between p-h-m">
@@ -27,7 +27,7 @@
                                 <template #overlay>
                                     <a-menu>
                                         <template v-if="$getters.isImAdmin">
-                                            <a-menu-item @click="openTab(m)" v-for="m in [configRolesMenusItem, configUsersMenusItem, configMenusMenuItem]">
+                                            <a-menu-item @click="openTab(m)" v-for="m in [configRolesMenusItem, configUsersMenusItem, configMenusMenuItem, configAssetsMenuItem]">
                                                 <div class="h h-xs">
                                                     <component :is="m.dropDownIcon"></component>
                                                     <div>{{ m.name }}</div>
@@ -58,7 +58,7 @@
                                 v-if="menus?.length > 0"
                                 :datas="menus"
                                 data-key="_id"
-                                children-key="subMenus">
+                                children-key="children">
                                 <template #="{ item: m, i, hasChildren, prevHasChildren, datas, toggle, isFold, isLast, isFirst }">
                                     <div
                                         :class="[
@@ -107,7 +107,7 @@
                             <anfo-orderable-container channel="tabs" :datas="tabs"
                                 @update:datas="val=>{
                                     val.forEach(i=>i.component = tabs.find(t=>t.id === i.id)?.component)
-                                    tabs = val
+                                    setContext({tabs: val})
                                 }"
                                 :data-key="d=>d.id" isHorizontal>
                                 <template #="{ data: t, i }">
@@ -133,7 +133,7 @@
             <template #content="{ currentTab, iframeTabs, componentTabs, currentTabID, menus }">
                 <div class="main-pages f-1">
                         <template v-if="currentTab">
-                            <div class="size-full p-m" v-if="currentTab.type === $const.menuType.component">
+                            <div class="size-full p-m" v-if="currentTab.menu?.type === $const.MT.COMPONENT">
                                 <keep-alive :include="componentTabs.map(t=>t.id)">
                                     <component :is="currentTab?.component"></component>
                                 </keep-alive>
@@ -201,7 +201,7 @@ $navHeight: 40px;
 }
 .main-tab{
     min-width: 72px;
-    transition: color .3s;
+    // transition: color .3s;
     background: linear-gradient(45deg, lighten($primaryColor, 15%), lighten($primaryColor, 10%));
     color: $primaryTextColor;
     position: relative;

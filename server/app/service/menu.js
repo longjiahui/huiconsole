@@ -16,7 +16,14 @@ const _genSubMenusLookupOption = (pipeline = [], i = 0)=>{
 
 module.exports = app => class extends app.Service {
     createSubMenusLookupOption(pipeline = []){
-        let lookupPipeline = []
+        let lookupPipeline = [{
+            $lookup: {
+                from: 'assets',
+                localField: 'data.preloadAssets',
+                foreignField: '_id',
+                as: 'data.preloadAssets',
+            }
+        }]
         return [...lookupPipeline, _genSubMenusLookupOption([...pipeline, ...lookupPipeline])]
     }
 

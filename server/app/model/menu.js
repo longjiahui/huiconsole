@@ -1,3 +1,6 @@
+const tree = require('../lib/mongoose-tree')
+const utils = require('../lib/mongoose-utils')
+
 module.exports = app=>{
     const mongoose = app.mongoose
     const Schema = mongoose.Schema
@@ -5,13 +8,15 @@ module.exports = app=>{
     var MenuSchema = new Schema({
       name: String,
       icon: String,
-      data: String,
+      data: {
+        type: Schema.Types.Mixed,
+      },
+      type: {
+        type: String,
+        enum: Object.values(app.MT),
+      },
       
       isTransparent: Boolean, // iframe transparent
-      parent: { type: Schema.Types.ObjectId, ref: 'Menu' },
-      subMenus: [{
-        type: Schema.Types.ObjectId, ref: 'Menu'
-      }],
 
       // 内部使用的order字段
       order: Number,
@@ -19,5 +24,9 @@ module.exports = app=>{
       timestamps: true,
     })
   
+    MenuSchema.plugin(utils, {
+      queryHandler: q=>q.populate('data.preloadAssets')
+    })
+    MenuSchema.plugin(tree)
     return mongoose.model('Menu', MenuSchema)
   }
