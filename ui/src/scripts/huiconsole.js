@@ -81,7 +81,11 @@ export default class {
             tabs,
             components,
 
-            finalMenus: computed(()=>this.menus.value.concat(...constMenus)),
+            finalMenus: utils.createAsyncComputed(()=>menus.value, async val=>{
+                // flat menus
+                val = await utils.iterateMap(val, 'children', m=>m)
+                return val.concat(...constMenus)
+            }, []),
             currentComponent: computed(()=>this.components.value[this.currentTabID.value]),
             currentTabID: computed({
                 get() {
@@ -190,7 +194,7 @@ export default class {
     async openTabByMenu(menuID, from, resolveId) {
         let tab = this.tabs.value.find(t => t.menu?._id === menuID)
         if (!tab) {
-            let menu = this.finalMenus.value.find(m=>m._id === menuID)
+            let menu = this.finalMenus.value.find(m=>m._ida=== menuID)
             if(!menu){
                 // 找不到菜单
                 message.warn('打开TAB失败：没找到菜单！')
