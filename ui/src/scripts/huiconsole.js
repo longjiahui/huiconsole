@@ -84,6 +84,7 @@ export default class {
             finalMenus: utils.createAsyncComputed(()=>menus.value, async val=>{
                 // flat menus
                 val = await utils.iterateMap(val, 'children', m=>m)
+                console.debug('finalMenus', val)
                 return val.concat(...constMenus)
             }, []),
             currentComponent: computed(()=>this.components.value[this.currentTabID.value]),
@@ -143,14 +144,14 @@ export default class {
             }, {
                 immediate: true,
             })
-            if (this.menus.value?.length > 0 && !(this.tabs.value?.length > 0)) {
-                await utils.iterate(this.menus.value, 'children', async m => {
-                    if (!(m.children?.length > 0)) {
-                        await this.openTabByMenu(m._id)
-                        return true
-                    }
-                })
-            }
+            // if (this.menus.value?.length > 0 && !(this.tabs.value?.length > 0)) {
+            //     await utils.iterate(this.menus.value, 'children', async m => {
+            //         if (!(m.children?.length > 0)) {
+            //             await this.openTabByMenu(m._id)
+            //             return true
+            //         }
+            //     })
+            // }
             // 决定是否修改currentTabID
             if (!this.currentTabID.value && this.tabs.value?.length > 0) {
                 this.currentTabID.value = this.tabs.value?.[0]?.id
@@ -194,7 +195,7 @@ export default class {
     async openTabByMenu(menuID, from, resolveId) {
         let tab = this.tabs.value.find(t => t.menu?._id === menuID)
         if (!tab) {
-            let menu = this.finalMenus.value.find(m=>m._ida=== menuID)
+            let menu = this.finalMenus.value.find(m=>m._id === menuID)
             if(!menu){
                 // 找不到菜单
                 message.warn('打开TAB失败：没找到菜单！')
