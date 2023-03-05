@@ -115,14 +115,12 @@
                         </div>
                     </div>
                     <div class="main-pages f-1">
-                        <template v-if="context.currentTab?.menu?.type === $const.MT.COMPONENT">
-                            <div :class="['size-full',
-                                context.constMenus.map(m=>m._id).includes(context.currentTab?.menu?._id) ? 'p-m' : '']">
-                                <keep-alive :include="context.componentTabs.map(t => t.id)">
-                                    <component :is="context.currentComponent"></component>
-                                </keep-alive>
-                            </div>
-                        </template>
+                        <div v-show="context.currentTab?.menu?.type === $const.MT.COMPONENT" :class="['size-full',
+                            context.constMenus.map(m=>m._id).includes(context.currentTab?.menu?._id) ? 'p-m' : '']">
+                            <keep-alive :include="context.componentTabs.map(t => t.id)">
+                                <component :is="context.currentTab?.menu?.type === $const.MT.COMPONENT ? context.currentComponent : null"></component>
+                            </keep-alive>
+                        </div>
                         <div v-for="t in context.iframeTabs" :key="t.id" v-show="context.currentTabID === t.id"
                             class="size-full overflow-hidden">
                             <component v-if="context.components[t.id]" :is="context.components[t.id]"></component>
