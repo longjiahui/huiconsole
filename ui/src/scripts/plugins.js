@@ -10,14 +10,10 @@ import dialog from '@/scripts/dialog'
 import utils from '@/scripts/utils'
 import $const from '@/const'
 
-import HuiConsole from '@/views/HuiConsole.vue'
-
 export default {
     install(app){
         app.use(AnfoUI)
         app.use(Antd)
-
-        app.component('hui-console', HuiConsole)
 
         Object.keys(Icons).forEach(i=>app.component(i, Icons[i]))
         app.config.globalProperties.$state = state

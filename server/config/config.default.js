@@ -4,7 +4,6 @@ const $const = require('../app/lib/const')
 // 读取配置文件 获取配置
 const huiConsoleConfig = require('../huiconsole.config.json')
 const { server: huiConsoleServerConfig } = huiConsoleConfig || {}
-
 module.exports = app=>{
     return {
         keys: 'huiconsole-cookie-key',

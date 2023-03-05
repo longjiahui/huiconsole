@@ -2,10 +2,8 @@
     <div class="v-m">
         <div class="card p-m h-s">
             <button class="button primary" @click="handleNewMenu">新建菜单</button>
-            <!-- <button class="button">导入</button>
-            <button class="button">导出</button> -->
         </div>
-        <div class="card p-m">
+        <div class="card p-m p-h-xxl">
             <anfo-tree @change="handleChange" :datas="menus" :data-key="d=>d._id" children-key="children">
                 <template #="{ item, i, datas, hasChildren }">
                     <div @click="handleEditMenu(item, datas, i)" class="clickable f-1 menu-item h h-m p-v-s">
@@ -38,15 +36,13 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { mutations, getters } from '@/store'
 import { api } from '@/scripts/api'
 import utils from '@/scripts/utils'
 import dialog from '@/scripts/dialog'
 
-let menus = ref([])
-
-api.menu.all().then(data=>{
-    menus.value = data
+let menus = utils.createMiddleware(()=>getters.menus, val=>{
+    mutations.setMenus(val)
 })
 
 function handleNewMenu(){
@@ -70,7 +66,12 @@ function handleNewSubMenu(parent){
 }
 function handleEditMenu(menu, datas, i){
     dialog.openMenuSaveDialog({menu}).then(data=>{
-        datas[i] = data
+        utils.iterate(menus.value, 'children', m=>{
+            if(m._id === data._id){
+                Object.assign(m, data)
+                return true
+            }
+        })
     })
 }
 function handleChange({ treeData, value, dropValue, index, parent } = {}){

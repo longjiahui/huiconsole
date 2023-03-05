@@ -52,7 +52,9 @@ module.exports = app=>class extends app.Controller{
 
     async myInfo(ctx){
         let user = ctx.state.user
-        ctx.body = this.service.ret.success(await this.service.user.getFullUserByID(user._id))
+        let userInfo = await this.service.user.getFullUserByID(user._id)
+        userInfo.menus = await this.service.menu.myAll()
+        ctx.body = this.service.ret.success(userInfo)
     }
 
     async decode(ctx){

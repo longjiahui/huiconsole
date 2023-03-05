@@ -10,5 +10,5 @@ export default {
         }else{
             return $const.MT.COMPONENT
         }
-    }
+    },
 }

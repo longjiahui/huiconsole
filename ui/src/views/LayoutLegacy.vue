@@ -1,72 +1,59 @@
 <template>
-    <div class="size-full">
-        <hui-console>
-            <template #layout="context">
-                <div v-loading="!context.isInited" class="size-full">
-                    <div class="page-layout size-full v">
-                        <div v-show="context.isInited" class="f-1 shrink-0 h align-stretch">
-                            <!-- sidebar -->
-                            <component :is="context.Sidebar" v-bind="context"></component>
-                            <div class="main-main f-1 v">
-                                <component :is="context.Tabs" v-bind="context"></component>
-                                <component :is="context.Content" v-bind="context"></component>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-            <template #sidebar="{ openTab, isInited, menus, currentTab, configRolesMenusItem, configMenusMenuItem, configAssetsMenuItem, configUsersMenusItem, setContext, }">
+    <div v-loading="!context.isInited" class="size-full">
+        <div class="page-layout size-full v">
+            <div v-show="context.isInited" class="f-1 shrink-0 h align-stretch">
                 <div class="sidebar shrink-0">
-                    <div class="title">
-                        <div class="brand h justify-space-between p-h-m">
-                            <div>{{ $getters.huiconsole.brand }}</div>
-                            <a-dropdown>
-                                <div class="clickable">
-                                    <SettingOutlined />
-                                </div>
-                                <template #overlay>
-                                    <a-menu>
-                                        <template v-if="$getters.isImAdmin">
-                                            <a-menu-item @click="openTab(m)" v-for="m in [configRolesMenusItem, configUsersMenusItem, configMenusMenuItem, configAssetsMenuItem]">
-                                                <div class="h h-xs">
-                                                    <component :is="m.dropDownIcon"></component>
-                                                    <div>{{ m.name }}</div>
-                                                </div>
-                                            </a-menu-item>
-                                        </template>
-                                        <a-menu-item @click="$mutations.logout()">
+                    <div class="title brand h h-s justify-space-between p-h-m">
+                        <div>{{ $getters.huiconsole.brand }}</div>
+                        <a-dropdown>
+                            <div class="clickable">
+                                <SettingOutlined />
+                            </div>
+                            <template #overlay>
+                                <a-menu>
+                                    <template v-if="$getters.isImAdmin">
+                                        <a-menu-item @click="huiconsole.openTabByMenu(m._id)"
+                                            v-for="m in context.constMenus">
                                             <div class="h h-xs">
-                                                <LogoutOutlined />
-                                                <div>退出登录</div>
+                                                <component :is="m.dropDownIcon"></component>
+                                                <div>{{ m.name }}</div>
                                             </div>
                                         </a-menu-item>
-                                        <a-menu-item @click="$utils.switchTheme($const.routes.default)">
-                                            <div class="h h-xs">
-                                                <BgColorsOutlined />
-                                                <div>切换默认主题</div>
-                                            </div>
-                                        </a-menu-item>
-                                    </a-menu>
-                                </template>
-                            </a-dropdown>
-                        </div>
+                                    </template>
+                                    <a-menu-item @click="$mutations.logout()">
+                                        <div class="h h-xs">
+                                            <LogoutOutlined />
+                                            <div>退出登录</div>
+                                        </div>
+                                    </a-menu-item>
+                                    <a-menu-item @click="$utils.switchTheme($const.routes.default)">
+                                        <div class="h h-xs">
+                                            <BgColorsOutlined />
+                                            <div>切换默认主题</div>
+                                        </div>
+                                    </a-menu-item>
+                                </a-menu>
+                            </template>
+                        </a-dropdown>
                     </div>
-                    <div v-if="isInited">
-                        <transition name="anfo-fade" mode="out-in">
-                            <anfo-loop
-                                transition-name=""
-                                v-if="menus?.length > 0"
-                                :datas="menus"
-                                data-key="_id"
-                                children-key="children">
-                                <template #="{ item: m, i, hasChildren, prevHasChildren, datas, toggle, isFold, isLast, isFirst }">
-                                    <div
-                                        :class="[
-                                            'f-1 menu-item h h-s',
-                                            m._id === currentTab?.menu?._id ? 'is-current':'',
-                                            hasChildren ? 'has-children':'',
-                                        ]"
-                                        @click="hasChildren ? toggle() : openTab(m)">
+                    <div v-if="context.isInited">
+                        <transition name="anfo-fade-tr" appear mode="out-in">
+                            <anfo-loop v-if="context.menus?.length > 0"
+                                :datas="context.menus" data-key="_id" children-key="children">
+                                <template
+                                    #="{ item: m, i, hasChildren, prevHasChildren, datas, toggle, isFold, isLast, isFirst }">
+                                    <div :class="[
+                                        'f-1 menu-item h h-s',
+                                        m._id === context.currentTab?.menu?._id ? 'is-current' : '',
+                                        hasChildren ? 'has-children' : '',
+
+                                        // // 左上角圆角情况
+                                        // prevHasChildren ? 'has-top-left-radius' : '',
+                                        // // 左下角圆角的情况 hasChildren || 树迭代的最后一个
+                                        // hasChildren || isLast ? 'has-bottom-left-radius' : '',
+                                        // isLast ? 'has-bottom-right-radius' : '',
+                                        // isFirst ? 'has-top-right-radius has-top-left-radius' : '',
+                                    ]" @click="hasChildren ? toggle() : huiconsole.openTabByMenu(m._id)">
                                         <div class="h h-s f-1">
                                             <div v-if="m.icon">
                                                 <component :is="m.icon" />
@@ -79,7 +66,7 @@
                                             transition: 'transform .3s',
                                             transform: `rotate(${isFold ? 0 : 90}deg)`,
                                         }">
-                                            <caret-right-outlined/>
+                                            <caret-right-outlined />
                                         </div>
                                     </div>
                                 </template>
@@ -92,96 +79,77 @@
                         </transition>
                     </div>
                 </div>
-            </template>
-            <template #tabs="{ tabs, currentTabID, setContext }">
-                <div class="main-tabs h h-s align-stretch">
-                    <transition name="anfo-fade" mode="out-in">
-                        <div class="f-1 h" v-if="tabs.length > 0">
-                            <transition name="anfo-fade" mode="out-in">
-                                <div class="p-h-s" v-if="tabs.length > 1">
-                                    <a-tooltip placement="left" title="清除全部标签">
-                                        <DeleteOutlined class="clickable" @click="setContext({tabs: []})" />
-                                    </a-tooltip>
-                                </div>
-                            </transition>
-                            <anfo-orderable-container channel="tabs" :datas="tabs"
-                                @update:datas="val=>{
-                                    val.forEach(i=>i.component = tabs.find(t=>t.id === i.id)?.component)
-                                    setContext({tabs: val})
-                                }"
-                                :data-key="d=>d.id" isHorizontal>
+                <div class="main-main f-1 v">
+                    <div class="main-tabs h  align-stretch">
+                        <div class="f-1 h" v-if="context.tabs.length > 0">
+                            <div v-if="context.tabs.length > 1">
+                                <a-tooltip placement="left" title="清除全部标签">
+                                    <CloseOutlined class="clickable p-h-s" @click="huiconsole.closeTabs()" />
+                                </a-tooltip>
+                            </div>
+                            <anfo-orderable-container
+                                channel="tabs"
+                                :datas="context.tabs"
+                                @update:datas="tabs => huiconsole.setTabs(tabs)"
+                                :data-key="d => d.id"
+                                isHorizontal>
                                 <template #="{ data: t, i }">
-                                    <div @click="setContext({currentTabID: t.id})"
-                                    style="height: 100%"
-                                        :class="['main-tab p-h-s h h-s', t.id === currentTabID ? 'is-current':'']">
+                                    <div @click="huiconsole.setCurrentTabID(t.id)" style="height: 100%"
+                                        :class="['main-tab p-h-m h h-s', t.id === context.currentTabID ? 'is-current' : '']">
                                         <!-- {{ t.id }} -->
-                                        <div v-if="t.menu?.icon"><component :is="t.menu?.icon"></component></div>
+                                        <div v-if="t.menu?.icon">
+                                            <component :is="t.menu?.icon"></component>
+                                        </div>
                                         <div class="f-1" style="word-break: break-all;">
                                             {{ t.menu?.name }}
                                         </div>
-                                        <div class="tab-delete" @click.stop="handleDeleteTab(tabs, i, setContext)"><CloseOutlined/></div>
+                                        <div class="tab-delete" @click.stop="huiconsole.closeTab(t.id)">
+                                            <CloseOutlined />
+                                        </div>
                                     </div>
                                 </template>
                             </anfo-orderable-container>
                         </div>
                         <div v-else class="h h-s">
-                            <div class="p-h-s">没有打开的标签页</div>
+                            <div class="p-h-m">没有打开的标签页</div>
                         </div>
-                    </transition>
-                </div>
-            </template>
-            <template #content="{ currentTab, iframeTabs, componentTabs, currentTabID, menus }">
-                <div class="main-pages f-1">
-                        <template v-if="currentTab">
-                            <div class="size-full p-m" v-if="currentTab.menu?.type === $const.MT.COMPONENT">
-                                <keep-alive :include="componentTabs.map(t=>t.id)">
-                                    <component :is="currentTab?.component"></component>
+                    </div>
+                    <div class="main-pages f-1">
+                        <template v-if="context.currentTab?.menu?.type === $const.MT.COMPONENT">
+                            <div :class="['size-full',
+                                context.constMenus.map(m=>m._id).includes(context.currentTab?.menu?._id) ? 'p-m' : '']">
+                                <keep-alive :include="context.componentTabs.map(t => t.id)">
+                                    <component :is="context.currentComponent"></component>
                                 </keep-alive>
                             </div>
                         </template>
-                        <div v-for="t in iframeTabs" :key="t.id"
-                            v-show="currentTabID === t.id" class="size-full overflow-hidden">
-                            <component :is="t.component"></component>
+                        <div v-for="t in context.iframeTabs" :key="t.id" v-show="context.currentTabID === t.id"
+                            class="size-full overflow-hidden">
+                            <component v-if="context.components[t.id]" :is="context.components[t.id]"></component>
                         </div>
-                        <!-- <transition name="anfo-fade" appear>
-                            <div v-if="!currentTab"
-                                class="size-full p-l v-s">
-                                <h1 class="title">HUI CONSOLE</h1>
-                                <p class="desc">longjiahui@hotmail.com</p>
-                                <div>欢迎使用 <span class="title">HUI CONSOLE</span></div>
-                                <div @click="openTab(configMenusMenuItem)" class="clickable" v-if="!(menus?.length > 0)">
-                                    还没有菜单数据，点击创建
-                                </div>
-                            </div>
-                        </transition> -->
                     </div>
-            </template>
-        </hui-console>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup>
-function handleDeleteTab(tabs, i, setContext){
-    tabs.splice(i, 1)
-    setContext({tabs})
-}
+import HuiConsole from '@/scripts/huiconsole'
+import { CloseOutlined } from '@ant-design/icons-vue';
+
+let huiconsole = new HuiConsole()
+huiconsole.init()
+
+let context = huiconsole.context()
 </script>
 
 <style lang="scss" scoped>
-$primaryColor: #2d60b1;
-.page-layout{
-    color: darken($primaryColor, 15%)!important;
-}
-.title{
-    color: $primaryColor;
-}
-.desc{
-    color: lighten($primaryColor, 40%);
-}
 
 $navHeight: 40px;
 .sidebar{
     width: 200px;
+    // background: whitesmoke;
 
     .brand{
         color: $primaryTextColor;
@@ -217,11 +185,11 @@ $navHeight: 40px;
     transition: background .3s, padding .3s, color .3s;
     cursor: pointer;
     background: rgba($primaryColor, calc(.04 + var(--layer) * .05));
-    padding: 12px 8px;
-    padding-left: calc(8px + var(--layer) * 16px);
+    padding: 12px 16px;
     
     &.has-children{
         background: rgba($primaryColor, calc(var(--layer) * .05));
+        box-shadow: rgba(0, 0, 0, .14) 0 0 24px;
     }
     
     @mixin focus{
@@ -236,8 +204,5 @@ $navHeight: 40px;
     &.is-current{
         @include focus;
     }
-}
-.main-pages{
-    background: white;
 }
 </style>

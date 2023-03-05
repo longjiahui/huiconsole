@@ -14,6 +14,7 @@ module.exports = app=>{
       type: {
         type: String,
         enum: Object.values(app.MT),
+        default: app.MT.COMPONENT,
       },
       
       isTransparent: Boolean, // iframe transparent

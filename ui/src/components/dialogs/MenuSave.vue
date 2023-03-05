@@ -68,6 +68,10 @@ let lMenu = utils.createMiddleware(()=>{
         // type: $const.MT.COMPONENT,
         data: {},
     }, props.menu)
+    if(props.menu.data?.preloadAssets?.length > 0){
+        data.data.preloadAssets = data.data.preloadAssets.map(a=>a?._id || a)   
+    }
+    data.parent = data.parent?._id || data.parent
     return data
 })
 // let isExternalComponent = computed(()=>lMenu.value.type === $const.MT.COMPONENT && business.isURL(lMenu.value.data?.data))
