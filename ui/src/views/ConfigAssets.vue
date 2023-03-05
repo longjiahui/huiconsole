@@ -53,7 +53,6 @@ import { onMounted } from 'vue';
 
 const { List, Pagination, context } = usePagination(api.asset.pageData)
 
-onMounted(()=>console.debug('mounted?'))
 function handleNew(){
     dialog.openAssetSaveDialog().then(()=>context.refresh())
 }

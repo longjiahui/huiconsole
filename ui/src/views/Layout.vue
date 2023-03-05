@@ -112,9 +112,12 @@
                         </div>
                     </div>
                     <div class="main-pages f-1">
-                        <keep-alive :include="context.componentTabs.map(t => t.id)">
-                            <component v-if="context.currentTab?.menu?.type === $const.MT.COMPONENT" :is="context.currentComponent"></component>
-                        </keep-alive>
+                        <div class="size-full" v-show="context.currentTab?.menu?.type === $const.MT.COMPONENT">
+                            <!-- 这个地方完全不能用v-if 否则keep-alive失效 -->
+                            <keep-alive :include="context.componentTabs.map(t => t.id)">
+                                <component :is="context.currentTab?.menu?.type === $const.MT.COMPONENT ? context.currentComponent : null"></component>
+                            </keep-alive>
+                        </div>
                         <div v-for="t in context.iframeTabs" :key="t.id" v-show="context.currentTabID === t.id"
                             :class="['size-full overflow-hidden', t?.menu?.isTransparent ? '' : 'card']">
                             <component :is="context.components[t.id]"></component>
